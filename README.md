@@ -1,6 +1,8 @@
 # Ott Ad Scheduler
 
-A ad schedule plugin for video.js
+A advertisement schedule plugin for video.js.
+
+This project is under development and will change frequences without notice.
 
 ## Getting Started
 
