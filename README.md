@@ -30,6 +30,20 @@ Default: true
 
 An example boolean option that has no effect.
 
+## Development
+### Requirement
+* npm
+* bower
+* grunt
+
+### Steps
+1. checkout project or [download zip file](archive/master.zip).
+2. cd into extracted folder.
+3. Setup environment:
+`npm install && bower install`
+4. Run demo locally:
+`grunt test`
+
 ## Release History
 
  - 0.1.0: Initial release
