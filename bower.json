@@ -1,0 +1,12 @@
+{
+  "name": "ott-ad-scheduler",
+  "version": "0.0.0",
+  "dependencies": {
+    "videojs": "~4.12.6",
+    "videojs-contrib-ads": "~2.1.0",
+    "videojs-sublime-skin": "~1.0.2"
+  },
+  "devDependencies": {},
+  "appPath": "lib",
+  "moduleName": "ott-ad-scheduler"
+}
