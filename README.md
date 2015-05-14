@@ -42,7 +42,7 @@ An example boolean option that has no effect.
 3. Setup environment:
 `npm install && bower install`
 4. Run demo locally:
-`grunt test`
+`grunt serve`
 
 ## Release History
 
