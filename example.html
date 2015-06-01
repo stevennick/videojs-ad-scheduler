@@ -12,6 +12,7 @@
   <!-- build:css(.tmp) styles/main.css -->
   <!-- endbuild -->
 <!--   <link href="node_modules/video.js/dist/video-js/video-js.css" rel="stylesheet"> -->
+  <link rel="stylesheet" href="bower_components/videojs-contrib-ads/src/videojs.ads.css" />
 
   <style>
     body {
@@ -61,6 +62,8 @@
   <!-- bower:js -->
   <script src="bower_components/videojs/dist/video-js/video.js"></script>
   <script src="bower_components/videojs-contrib-ads/src/videojs.ads.js"></script>
+  <script src="bower_components/vmap-client-js/vmap-client.js"></script>
+  <script src="bower_components/vast-client-js/vast-client.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
 
@@ -68,11 +71,13 @@
   <script src="lib/ott-ad-scheduler.js"></script>
   <!-- endbuild -->
   <script>
-    // fire up the plugin
-    // videojs('video').ottAdScheduler();
+
     videojs('video', {}, function(){
       var player = this;
-      player.ads();
+      window.player = player;
+      // player.ads();
+      // fire up the plugin
+      videojs('video').ottAdScheduler();
     });
   </script>
 </body>

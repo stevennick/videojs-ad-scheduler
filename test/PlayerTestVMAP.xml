@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<VMAP xmlns:vmap="http://www.iab.net/vmap-1.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="vast.xsd" 
+    xmlns:psns="http://microsoft.com/namespace/playersequencer/iabExtensions.xsd"
+    version="1.0">
+<vmap:AdBreak breakType="linear" breakId="mypre" timeOffset="start">
+    <vmap:AdSource allowMultipleAds="true" followRedirects="true" id="1">
+        <vmap:VASTData>
+            <VAST xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                xsi:noNamespaceSchemaLocation="vast.xsd" 
+                version="2.0">
+                <Ad id="1">
+                    <InLine>
+                        <AdSystem>GDFP</AdSystem>
+                        <AdTitle>video</AdTitle>
+                        <Description>video ad</Description>
+                        <Error><![CDATA[http://example.com/ad/error/?label=videoplayfailed]]></Error>
+                        <Impression><![CDATA[http://example.com/ad/view]]></Impression>
+                        <Creatives>
+                            <Creative>
+                                <Linear>
+                                    <Duration>00:00:05.6</Duration>
+                                    <MediaFiles>
+                                        <MediaFile delivery="streaming" width="852" height="480" type="application/vnd.apple.mpegURL">
+                                            <![CDATA[http://wamsblureg001orig-hs.cloudapp.net/5389c0c5-340f-48d7-90bc-0aab664e5f02/Windows%208_%20You%20and%20Me%20Together-m3u8-aapl.ism/Manifest(format=m3u8-aapl)]]>
+                                        </MediaFile>
+                                        <MediaFile id="GDFP" delivery="progressive" bitrate="1230" width="852" height="480" type="video/webm" scalable="true" maintainAspectRatio="true">
+                                            <![CDATA[http://htmlsamples.blob.core.windows.net/video/Windows_8_You_and_Me_Together.webm]]>
+                                        </MediaFile>
+                                        <MediaFile id="GDFP" delivery="progressive" bitrate="1230" width="852" height="480" type="video/mp4" scalable="true" maintainAspectRatio="true">
+                                            <![CDATA[http://htmlsamples.blob.core.windows.net/video/Windows_8_You_and_Me_Together_852x480.mp4]]>
+                                        </MediaFile>
+                                    </MediaFiles>
+                                </Linear>
+                            </Creative>
+                        </Creatives>
+                    </InLine>
+                </Ad>
+            </VAST>
+        </vmap:VASTData>
+    </vmap:AdSource>
+</vmap:AdBreak>
+
+<vmap:AdBreak breakType="linear" breakId="mymidpod" timeOffset="00:00:11">
+    <vmap:AdSource allowMultipleAds="true" followRedirects="true" id="2">
+        <vmap:AdTagURI templateType="vast3">
+            <![CDATA[./PlayerTestVASTPod.xml]]>
+        </vmap:AdTagURI>
+    </vmap:AdSource>
+</vmap:AdBreak>
+
+<vmap:AdBreak breakType="linear" breakId="mymid2" timeOffset="00:00:41.2">
+    <vmap:AdSource allowMultipleAds="true" followRedirects="true" id="3">
+        <vmap:AdTagURI templateType="vast3">
+            <![CDATA[./PlayerTestVAST.xml]]>
+        </vmap:AdTagURI>
+    </vmap:AdSource>
+    <vmap:Extensions>
+        <vmap:Extension type="application/xml"><psns:PlayPolicy deleteAfterPlayed="true"/></vmap:Extension>
+    </vmap:Extensions>
+</vmap:AdBreak>
+
+<vmap:AdBreak breakType="linear" breakId="mypost" timeOffset="end">
+    <vmap:AdSource allowMultipleAds="true" followRedirects="true" id="4">
+        <vmap:VASTData>
+            <VAST xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                xsi:noNamespaceSchemaLocation="vast.xsd" 
+                version="2.0">
+                <Ad id="1">
+                    <InLine>
+                        <AdSystem>GDFP</AdSystem>
+                        <AdTitle>video</AdTitle>
+                        <Description>video ad</Description>
+                        <Error><![CDATA[http://example.com/ad/error/?label=videoplayfailed]]></Error>
+                        <Impression><![CDATA[http://example.com/ad/view]]></Impression>
+                        <Creatives>
+                            <Creative>
+                                <Linear>
+                                    <Duration>00:00:12</Duration>
+                                    <MediaFiles>
+                                        <MediaFile delivery="streaming" width="852" height="480" type="application/vnd.apple.mpegURL" psns:mediaTimeOffset="17">
+                                            <![CDATA[http://wamsblureg001orig-hs.cloudapp.net/722b7927-a0ec-4e75-b105-98ddfa29e791/Windows%208_%20Cliffjumpers-m3u8-aapl.ism/Manifest(format=m3u8-aapl)]]>
+                                        </MediaFile>
+                                        <MediaFile id="GDFP" delivery="progressive" bitrate="1230" width="852" height="480" type="video/webm" scalable="true" maintainAspectRatio="true" psns:mediaTimeOffset="17">
+                                            <![CDATA[http://htmlsamples.blob.core.windows.net/video/Windows_8_Cliffjumpers.webm]]>
+                                        </MediaFile>
+                                        <MediaFile id="GDFP" delivery="progressive" bitrate="1230" width="852" height="480" type="video/mp4" scalable="true" maintainAspectRatio="true" psns:mediaTimeOffset="17">
+                                            <![CDATA[http://htmlsamples.blob.core.windows.net/video/Windows_8_Cliffjumpers_852x480.mp4]]>
+                                        </MediaFile>
+                                    </MediaFiles>
+                                </Linear>
+                            </Creative>
+                        </Creatives>
+                    </InLine>
+                </Ad>
+            </VAST>
+        </vmap:VASTData>
+    </vmap:AdSource>
+</vmap:AdBreak>
+
+</VMAP>
