@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<VMAP xmlns:vmap="http://www.iab.net/vmap-1.0" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:noNamespaceSchemaLocation="vast.xsd" 
+<VMAP xmlns:vmap="http://www.iab.net/vmap-1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vast.xsd"
     xmlns:psns="http://microsoft.com/namespace/playersequencer/iabExtensions.xsd"
     version="1.0">
 <vmap:AdBreak breakType="linear" breakId="mypre" timeOffset="start">
     <vmap:AdSource allowMultipleAds="true" followRedirects="true" id="1">
         <vmap:VASTData>
-            <VAST xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-                xsi:noNamespaceSchemaLocation="vast.xsd" 
+            <VAST xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="vast.xsd"
                 version="2.0">
                 <Ad id="1">
                     <InLine>
@@ -45,7 +45,7 @@
 <vmap:AdBreak breakType="linear" breakId="mymidpod" timeOffset="00:00:11">
     <vmap:AdSource allowMultipleAds="true" followRedirects="true" id="2">
         <vmap:AdTagURI templateType="vast3">
-            <![CDATA[./PlayerTestVASTPod.xml]]>
+            <![CDATA[./test/PlayerTestVASTPod.xml]]>
         </vmap:AdTagURI>
     </vmap:AdSource>
 </vmap:AdBreak>
@@ -53,7 +53,7 @@
 <vmap:AdBreak breakType="linear" breakId="mymid2" timeOffset="00:00:41.2">
     <vmap:AdSource allowMultipleAds="true" followRedirects="true" id="3">
         <vmap:AdTagURI templateType="vast3">
-            <![CDATA[./PlayerTestVAST.xml]]>
+            <![CDATA[./test/PlayerTestVAST.xml]]>
         </vmap:AdTagURI>
     </vmap:AdSource>
     <vmap:Extensions>
@@ -64,8 +64,8 @@
 <vmap:AdBreak breakType="linear" breakId="mypost" timeOffset="end">
     <vmap:AdSource allowMultipleAds="true" followRedirects="true" id="4">
         <vmap:VASTData>
-            <VAST xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-                xsi:noNamespaceSchemaLocation="vast.xsd" 
+            <VAST xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="vast.xsd"
                 version="2.0">
                 <Ad id="1">
                     <InLine>
