@@ -78,9 +78,9 @@
       plugins: {
         ads: {},
         ottAdScheduler: {
-          serverUrl: '/test/PlayerTestVMAP.xml',
-          userId: 'U00001',
-          contentId: 'c00001'
+          requestUrl: '/test/PlayerTestVMAP.xml' + '?userId=U00001' + '&contentId=c00001',
+          skipTime: 5,
+          allowSkip: false
         }
       }
     };
@@ -94,9 +94,9 @@
     }).ready(function() {
       var player = this;
       // trigger contentupdate event
-      player.src([{src:"http://vjs.zencdn.net/v/oceans.mp4", type:"video/mp4"}]);
+      // player.src([{src:"http://vjs.zencdn.net/v/oceans.mp4", type:"video/mp4"}]);
       //
-      // player.src([{src:"http://localhost/Furious7_trailer.mp4", type:"video/mp4"}]);
+      player.src([{src:"http://localhost/Furious7_trailer_mini.mp4", type:"video/mp4"}]);
       player.play();
     });
   </script>
