@@ -6,7 +6,6 @@
   <!-- build:css(.) styles/vendor.css -->
   <!-- bower:css -->
   <link rel="stylesheet" href="bower_components/videojs/dist/video-js/video-js.css" />
-  <link rel="stylesheet" href="bower_components/videojs-sublime-skin/dist/videojs-sublime-skin.css" />
   <!-- endbower -->
   <!-- endbuild -->
   <!-- build:css(.tmp) styles/main.css -->
@@ -94,9 +93,9 @@
     }).ready(function() {
       var player = this;
       // trigger contentupdate event
-      // player.src([{src:"http://vjs.zencdn.net/v/oceans.mp4", type:"video/mp4"}]);
+      player.src([{src:"http://vjs.zencdn.net/v/oceans.mp4", type:"video/mp4"}]);
       //
-      player.src([{src:"http://localhost/Furious7_trailer_mini.mp4", type:"video/mp4"}]);
+      // player.src([{src:"http://172.16.0.110/Furious7_trailer_mini.mp4", type:"video/mp4"}]);
       player.play();
     });
   </script>

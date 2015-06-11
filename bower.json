@@ -6,7 +6,8 @@
     "videojs-contrib-ads": "~2.1.0",
     "videojs-sublime-skin": "~1.0.2",
     "vmap-client-js": "stevennick/vmap-client-js",
-    "vast-client-js": "stevennick/vast-client-js#~1.3.3-draft1"
+    "vast-client-js": "stevennick/vast-client-js#~1.3.3-draft1",
+    "videojs-contrib-hls": "~0.17.1"
   },
   "devDependencies": {},
   "appPath": "lib",
