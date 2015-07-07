@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Ott Ad Scheduler</title>
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
+  <!-- build:css(.) styles/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/videojs/dist/video-js/video-js.min.css" />
+  <link rel="stylesheet" href="bower_components/videojs-sublime-skin/dist/videojs-sublime-skin.min.css" />
+  <!-- endbower -->
+  <!-- endbuild -->
+  <!-- build:css(.tmp) styles/main.css -->
+  <!-- endbuild -->
+  <link rel="stylesheet" href="bower_components/videojs-contrib-ads/src/videojs.ads.css" />
+
+  <style>
+    html, body {
+      font-family: Arial, sans-serif;
+      height: 100%;
+      background-color: black;
+    }
+
+
+    .container, #video {
+      padding-right: 0px;
+      padding-left: 0px;
+      overflow-y:auto;
+      height:100%;
+      width: 100%;
+    }
+  </style>
+
+</head>
+<body>
+  <div class="container">
+    <video id="video"
+           class="video-js vjs-sublime-skin"
+           width="100%"
+           height="100%"
+           controls>
+      <p>
+        Your system doesn't support video. Please <a href="http://browsehappy.com/">upgrade your system</a> to see video.
+      </p>
+    </video>
+  </div>
+
+  <!-- build:js(.) scripts/vendor.js -->
+  <!-- bower:js -->
+  <script src="bower_components/videojs/dist/video-js/video.js"></script>
+  <script src="bower_components/videojs-contrib-ads/src/videojs.ads.js"></script>
+  <script src="bower_components/vmap-client-js/vmap-client.js"></script>
+  <script src="bower_components/vast-client-js/vast-client.js"></script>
+  <!-- endbower -->
+  <!-- endbuild -->
+
+  <!-- js extensions out of bower auto management -->
+  <script src="bower_components/videojs-contrib-media-sources/src/videojs-media-sources.js"></script>
+  <script src="bower_components/videojs-contrib-hls/dist/videojs.hls.min.js"></script>
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <!-- js extensions out of bower auto management -->
+
+  <!-- build:js({.tmp,lib}) scripts/scripts.js -->
+  <script src="lib/ott-ad-scheduler.js"></script>
+  <script src="lib/ott-player-library.js"></script>
+  <!-- endbuild -->
+  <script>
+    var options = {
+      poster: 'black_128.png',
+      plugins: {
+        poster: 'black_128.png',
+        ottPlayerLibrary: {
+          requestUrl: '',
+          skipTime: 5,
+          allowSkip: false
+        }
+      }
+    };
+
+    var player = videojs('video', options);
+    player.ready(function() {
+      player.controls(false);
+      console.log("Player ready.");
+    });
+  </script>
+</body>
+</html>
