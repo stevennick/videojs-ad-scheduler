@@ -78,25 +78,17 @@
       plugins: {
         ads: {},
         ottAdScheduler: {
-          requestUrl: '/test/PlayerTestVMAP.xml' + '?userId=U00001' + '&contentId=c00001',
+          requestUrl: '/test/PlayerTestVMAP.xml',
           skipTime: 5,
           allowSkip: false
         }
       }
     };
 
-    var player = videojs('video', options, function(){
-      var player = this;
-      // window.player = player;
-      // player.ads();
-      // fire up the plugin
-      // videojs('video').ottAdScheduler();
-    }).ready(function() {
+    var player = videojs('video', options).ready(function() {
       var player = this;
       // trigger contentupdate event
-      player.src([{src:"http://vjs.zencdn.net/v/oceans.mp4", type:"video/mp4"}]);
-      //
-      // player.src([{src:"http://172.16.0.110/Furious7_trailer_mini.mp4", type:"video/mp4"}]);
+      player.src([{src:'http://vjs.zencdn.net/v/oceans.mp4', type:'video/mp4'}]);
       player.play();
     });
   </script>
