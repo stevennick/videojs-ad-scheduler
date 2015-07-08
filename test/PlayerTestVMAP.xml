@@ -15,12 +15,12 @@
                         <AdSystem>GDFP</AdSystem>
                         <AdTitle>video</AdTitle>
                         <Description>video ad</Description>
-                        <Error><![CDATA[http://example.com/ad/error/?label=videoplayfailed]]></Error>
-                        <Impression><![CDATA[http://example.com/ad/view]]></Impression>
+                        <Error><![CDATA[/example.html?ad/error/?label=videoplayfailed]]></Error>
+                        <Impression><![CDATA[/example.html?ad/view]]></Impression>
                         <Creatives>
                             <Creative>
                                 <Linear>
-                                    <Duration>00:00:05.6</Duration>
+                                    <Duration>00:00:30</Duration>
                                     <MediaFiles>
                                         <MediaFile id="GDFP" delivery="progressive" bitrate="1230" width="852" height="480" type="video/webm" scalable="true" maintainAspectRatio="true">
                                             <![CDATA[http://htmlsamples.blob.core.windows.net/video/Windows_8_You_and_Me_Together.webm]]>
@@ -69,12 +69,12 @@
                         <AdSystem>GDFP</AdSystem>
                         <AdTitle>video</AdTitle>
                         <Description>video ad</Description>
-                        <Error><![CDATA[http://example.com/ad/error/?label=videoplayfailed]]></Error>
-                        <Impression><![CDATA[http://example.com/ad/view]]></Impression>
+                        <Error><![CDATA[/example.html?ad/error/?label=videoplayfailed]]></Error>
+                        <Impression><![CDATA[/example.html?ad/view]]></Impression>
                         <Creatives>
                             <Creative>
                                 <Linear>
-                                    <Duration>00:00:12</Duration>
+                                    <Duration>00:00:30</Duration>
                                     <MediaFiles>
                                         <MediaFile id="GDFP" delivery="progressive" bitrate="1230" width="852" height="480" type="video/webm" scalable="true" maintainAspectRatio="true" psns:mediaTimeOffset="17">
                                             <![CDATA[http://htmlsamples.blob.core.windows.net/video/Windows_8_Cliffjumpers.webm]]>

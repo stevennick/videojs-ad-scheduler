@@ -129,7 +129,7 @@ module.exports = function(grunt) {
         },
         files: [
           '<%= plugin.app %>/{,*/}*.js',
-          '<%= plugin.app %>/../example.html'
+          '<%= plugin.app %>/../ott-player.html'
         ]
       }
     },

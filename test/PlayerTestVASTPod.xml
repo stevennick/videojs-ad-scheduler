@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<VAST xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:noNamespaceSchemaLocation="vast.xsd" 
+<VAST xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vast.xsd"
     xmlns:psns="http://microsoft.com/namespace/playersequencer/iabExtensions.xsd"
     version="2.0">
 <Ad id="1235" sequence="2">
@@ -8,29 +8,29 @@
 <AdSystem>GDFP</AdSystem>
 <AdTitle>Pod video 2</AdTitle>
 <Description>video ad</Description>
-<Error><![CDATA[http://example.com/ad/error/?label=videoplayfailed]]></Error>
-<Impression><![CDATA[http://example.com/ad/view]]></Impression>
+<Error><![CDATA[/example.html?ad/error/?label=videoplayfailed]]></Error>
+<Impression><![CDATA[/example.html?ad/view]]></Impression>
 <Creatives>
     <Creative>
         <Linear>
-            <Duration>00:00:05.6</Duration>
+            <Duration>00:00:30</Duration>
             <TrackingEvents>
-                <Tracking event="start"><![CDATA[http://example.com/ad/tracking/?label=part2viewed]]></Tracking>
-                <Tracking event="firstQuartile"><![CDATA[http://example.com/ad/tracking/?label=videoplaytime25]]></Tracking>
-                <Tracking event="midpoint"><![CDATA[http://example.com/ad/tracking/?label=videoplaytime50]]></Tracking>
-                <Tracking event="thirdQuartile"><![CDATA[http:example.com/ad/tracking/?label=videoplaytime75]]></Tracking>
-                <Tracking event="complete"><![CDATA[http://example.com/ad/tracking/?label=videoplaytime100]]></Tracking>
-                <Tracking event="mute"><![CDATA[http://example.com/ad/tracking/?label=admute]]></Tracking>
-                <Tracking event="unmute"><![CDATA[http://example.com/ad/tracking/?label=adunmute]]></Tracking>
-                <Tracking event="rewind"><![CDATA[http://example.com/ad/tracking/?label=adrewind]]></Tracking>
-                <Tracking event="pause"><![CDATA[http://example.com/ad/tracking/?label=adpause]]></Tracking>
-                <Tracking event="resume"><![CDATA[http://example.com/ad/tracking/?label=adresume]]></Tracking>
-                <Tracking event="fullscreen"><![CDATA[http://example.com/ad/tracking/?label=adfullscreen]]></Tracking>
-                <Tracking event="acceptInvitation"><![CDATA[http://example.com/ad/tracking/?label=acceptinvitation]]></Tracking>
-                <Tracking event="creativeView"><![CDATA[http://example.com/ad/tracking/?label=vast_creativeview]]></Tracking>
+                <Tracking event="start"><![CDATA[/example.html?ad/tracking/?label=part2viewed]]></Tracking>
+                <Tracking event="firstQuartile"><![CDATA[/example.html?ad/tracking/?label=videoplaytime25]]></Tracking>
+                <Tracking event="midpoint"><![CDATA[/example.html?ad/tracking/?label=videoplaytime50]]></Tracking>
+                <Tracking event="thirdQuartile"><![CDATA[/example.html?ad/tracking/?label=videoplaytime75]]></Tracking>
+                <Tracking event="complete"><![CDATA[/example.html?ad/tracking/?label=videoplaytime100]]></Tracking>
+                <Tracking event="mute"><![CDATA[/example.html?ad/tracking/?label=admute]]></Tracking>
+                <Tracking event="unmute"><![CDATA[/example.html?ad/tracking/?label=adunmute]]></Tracking>
+                <Tracking event="rewind"><![CDATA[/example.html?ad/tracking/?label=adrewind]]></Tracking>
+                <Tracking event="pause"><![CDATA[/example.html?ad/tracking/?label=adpause]]></Tracking>
+                <Tracking event="resume"><![CDATA[/example.html?ad/tracking/?label=adresume]]></Tracking>
+                <Tracking event="fullscreen"><![CDATA[/example.html?ad/tracking/?label=adfullscreen]]></Tracking>
+                <Tracking event="acceptInvitation"><![CDATA[/example.html?ad/tracking/?label=acceptinvitation]]></Tracking>
+                <Tracking event="creativeView"><![CDATA[/example.html?ad/tracking/?label=vast_creativeview]]></Tracking>
             </TrackingEvents>
             <VideoClicks>
-                <ClickThrough id="GDFP"><![CDATA[http://example.com/ad/clicks/?adurl=http://www.microsoft.com]]></ClickThrough>
+                <ClickThrough id="GDFP"><![CDATA[/example.html?ad/clicks/?adurl=http://www.microsoft.com]]></ClickThrough>
             </VideoClicks>
             <MediaFiles>
                 <MediaFile id="GDFP" delivery="progressive" bitrate="1230" width="852" height="480" type="video/webm" scalable="true" maintainAspectRatio="true">
@@ -56,29 +56,29 @@
 <AdSystem>GDFP</AdSystem>
 <AdTitle>Pod video 1</AdTitle>
 <Description>video ad</Description>
-<Error><![CDATA[http://example.com/ad/error/?label=videoplayfailed]]></Error>
-<Impression><![CDATA[http://example.com/ad/view]]></Impression>
+<Error><![CDATA[/example.html?ad/error/?label=videoplayfailed]]></Error>
+<Impression><![CDATA[/example.html?ad/view]]></Impression>
 <Creatives>
     <Creative>
         <Linear>
-            <Duration>00:00:12</Duration>
+            <Duration>00:00:30</Duration>
             <TrackingEvents>
-                <Tracking event="start"><![CDATA[http://example.com/ad/tracking/?label=part2viewed]]></Tracking>
-                <Tracking event="firstQuartile"><![CDATA[http://example.com/ad/tracking/?label=videoplaytime25]]></Tracking>
-                <Tracking event="midpoint"><![CDATA[http://example.com/ad/tracking/?label=videoplaytime50]]></Tracking>
-                <Tracking event="thirdQuartile"><![CDATA[http:example.com/ad/tracking/?label=videoplaytime75]]></Tracking>
-                <Tracking event="complete"><![CDATA[http://example.com/ad/tracking/?label=videoplaytime100]]></Tracking>
-                <Tracking event="mute"><![CDATA[http://example.com/ad/tracking/?label=admute]]></Tracking>
-                <Tracking event="unmute"><![CDATA[http://example.com/ad/tracking/?label=adunmute]]></Tracking>
-                <Tracking event="rewind"><![CDATA[http://example.com/ad/tracking/?label=adrewind]]></Tracking>
-                <Tracking event="pause"><![CDATA[http://example.com/ad/tracking/?label=adpause]]></Tracking>
-                <Tracking event="resume"><![CDATA[http://example.com/ad/tracking/?label=adresume]]></Tracking>
-                <Tracking event="fullscreen"><![CDATA[http://example.com/ad/tracking/?label=adfullscreen]]></Tracking>
-                <Tracking event="acceptInvitation"><![CDATA[http://example.com/ad/tracking/?label=acceptinvitation]]></Tracking>
-                <Tracking event="creativeView"><![CDATA[http://example.com/ad/tracking/?label=vast_creativeview]]></Tracking>
+                <Tracking event="start"><![CDATA[/example.html?ad/tracking/?label=part2viewed]]></Tracking>
+                <Tracking event="firstQuartile"><![CDATA[/example.html?ad/tracking/?label=videoplaytime25]]></Tracking>
+                <Tracking event="midpoint"><![CDATA[/example.html?ad/tracking/?label=videoplaytime50]]></Tracking>
+                <Tracking event="thirdQuartile"><![CDATA[/example.html?ad/tracking/?label=videoplaytime75]]></Tracking>
+                <Tracking event="complete"><![CDATA[/example.html?ad/tracking/?label=videoplaytime100]]></Tracking>
+                <Tracking event="mute"><![CDATA[/example.html?ad/tracking/?label=admute]]></Tracking>
+                <Tracking event="unmute"><![CDATA[/example.html?ad/tracking/?label=adunmute]]></Tracking>
+                <Tracking event="rewind"><![CDATA[/example.html?ad/tracking/?label=adrewind]]></Tracking>
+                <Tracking event="pause"><![CDATA[/example.html?ad/tracking/?label=adpause]]></Tracking>
+                <Tracking event="resume"><![CDATA[/example.html?ad/tracking/?label=adresume]]></Tracking>
+                <Tracking event="fullscreen"><![CDATA[/example.html?ad/tracking/?label=adfullscreen]]></Tracking>
+                <Tracking event="acceptInvitation"><![CDATA[/example.html?ad/tracking/?label=acceptinvitation]]></Tracking>
+                <Tracking event="creativeView"><![CDATA[/example.html?ad/tracking/?label=vast_creativeview]]></Tracking>
             </TrackingEvents>
             <VideoClicks>
-                <ClickThrough id="GDFP"><![CDATA[http://example.com/ad/clicks/?adurl=http://www.microsoft.com]]></ClickThrough>
+                <ClickThrough id="GDFP"><![CDATA[/example.html?ad/clicks/?adurl=http://www.microsoft.com]]></ClickThrough>
             </VideoClicks>
             <MediaFiles>
                 <MediaFile id="GDFP" delivery="progressive" bitrate="1230" width="852" height="480" type="video/webm" scalable="true" maintainAspectRatio="true">
