@@ -9,15 +9,14 @@ Once you've added the plugin script to your page, you can use it with any video:
 
 ```html
 <script src="video.js"></script>
+<script src="videojs.ads.js"></script>
 <script src="ott-ad-scheduler.js"></script>
 <script>
   var options = {
     plugins: {
       ads: {}, // For videojs-contrib-ads plugin required.
       ottAdScheduler: {
-        serverUrl: '/test/PlayerTestVMAP.xml',  // VMAP location
-        userId: 'U00001',                       // Optional user identifier
-        contentId: 'c00001'                     // Optional media identifier
+        serverUrl: '/test/PlayerTestVMAP.xml'  // VMAP location
       }
     }
   };
@@ -29,6 +28,8 @@ Once you've added the plugin script to your page, you can use it with any video:
 ```
 
 You can also use regular video.js src function to assign media content. Once video played, video.js will schedule ad breaks and play ads described in VMAP/VAST documents.
+
+To make scheduler work, toy still needs external VAST/VMAP parser for information extraction, I recommanded to use [vast-client-js](/dailymotion/vast-client-js) from dailymotion and [vmap-client-js](/stevennick/vmap-client-js) created by me.
 
 There's also a [working example](example.html) of the plugin you can check out if you're having trouble.
 
@@ -80,5 +81,7 @@ This plugin added options as same name methods, let user be able to change optio
 `grunt serve`
 
 ## Release History
-
  - 0.1.0: Initial release
+
+## Author
+Stevennick Ciou
