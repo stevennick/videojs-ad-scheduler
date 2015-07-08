@@ -29,7 +29,7 @@ Once you've added the plugin script to your page, you can use it with any video:
 
 You can also use regular video.js src function to assign media content. Once video played, video.js will schedule ad breaks and play ads described in VMAP/VAST documents.
 
-To make scheduler work, toy still needs external VAST/VMAP parser for information extraction, I recommanded to use [vast-client-js](/dailymotion/vast-client-js) from dailymotion and [vmap-client-js](/stevennick/vmap-client-js) created by me.
+To make scheduler work, toy still needs external VAST/VMAP parser for information extraction, I recommanded to use [vast-client-js](https://github.com/dailymotion/vast-client-js) from dailymotion and [vmap-client-js](https://github.com/stevennick/vmap-client-js) created by me.
 
 There's also a [working example](example.html) of the plugin you can check out if you're having trouble.
 
