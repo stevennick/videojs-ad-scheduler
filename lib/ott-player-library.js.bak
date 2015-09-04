@@ -151,7 +151,7 @@
       login: function(options, callback, errorCallback) {
         // var settings = videojs.util.mergeOptions(default, options);
         // For backward compatiable
-        options.url = options.url + "?" +$.param(options.data, false);
+        options.url = options.url + "?" +$.param(data, false);
         $.ajax({
           url: options.url,
           type: options.type,

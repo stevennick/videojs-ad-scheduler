@@ -47,17 +47,19 @@
 
   <!-- build:js(.) scripts/vendor.js -->
   <!-- bower:js -->
+  <script src="bower_components/jquery/dist/jquery.js"></script>
   <script src="bower_components/videojs/dist/video-js/video.js"></script>
   <script src="bower_components/videojs-contrib-ads/src/videojs.ads.js"></script>
   <script src="bower_components/vmap-client-js/vmap-client.js"></script>
   <script src="bower_components/vast-client-js/vast-client.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
 
   <!-- js extensions out of bower auto management -->
   <script src="bower_components/videojs-contrib-media-sources/src/videojs-media-sources.js"></script>
-  <script src="bower_components/videojs-contrib-hls/dist/videojs.hls.min.js"></script>
-  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/videojs-contrib-hls/dist/videojs.hls.js"></script>
+  <!-- <script src="bower_components/jquery/dist/jquery.min.js"></script> -->
   <!-- js extensions out of bower auto management -->
 
   <!-- build:js({.tmp,lib}) scripts/scripts.js -->
@@ -66,10 +68,12 @@
   <!-- endbuild -->
   <script>
     var options = {
+      debug: true,
       poster: 'black_128.png',
       plugins: {
-        poster: 'black_128.png',
+        // poster: 'black_128.png',
         ottPlayerLibrary: {
+          debug: true,
           requestUrl: '',
           skipTime: 5,
           allowSkip: false
@@ -77,10 +81,21 @@
       }
     };
 
-    var player = videojs('video', options);
-    player.ready(function() {
-      player.controls(false);
-      console.log("Player ready.");
+    var player = videojs('video', options).ready(function() {
+      var mPlayer = this;
+      var content = {
+        // vmap: 'http://192.168.4.205/ad-server/index.php?r=vmap/gen&pid=101000079',
+        vmap: '/test/PlayerTestVMAP.xml',
+        // vmap: '',
+        //src: 'http://localhost/video/101000083_The_Silent_War/101000083_The_Silent_War.m3u8'
+        // src: 'http://vjs.zencdn.net/v/oceans.mp4'
+        src: [{src:'http://solutions.brightcove.com/jwhisenant/hls/apple/bipbop/bipbopall.m3u8', type:'application/x-mpegURL'}]
+        // src: [{src:'http://vjs.zencdn.net/v/oceans.mp4', type:'video/mp4'}]
+      };
+      mPlayer.ottPlayerLibrary.loadContent(content);
+      // mPlayer.src(content.src);
+      // mPlayer.ottPlayerLibrary.VMAPSrc(content.vmap);
+      // mPlayer.play();
     });
   </script>
 </body>
