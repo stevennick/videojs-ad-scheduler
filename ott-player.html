@@ -84,18 +84,11 @@
     var player = videojs('video', options).ready(function() {
       var mPlayer = this;
       var content = {
-        // vmap: 'http://192.168.4.205/ad-server/index.php?r=vmap/gen&pid=101000079',
         vmap: '/test/PlayerTestVMAP.xml',
-        // vmap: '',
-        //src: 'http://localhost/video/101000083_The_Silent_War/101000083_The_Silent_War.m3u8'
-        // src: 'http://vjs.zencdn.net/v/oceans.mp4'
-        src: [{src:'http://solutions.brightcove.com/jwhisenant/hls/apple/bipbop/bipbopall.m3u8', type:'application/x-mpegURL'}]
-        // src: [{src:'http://vjs.zencdn.net/v/oceans.mp4', type:'video/mp4'}]
+        // src: [{src:'http://solutions.brightcove.com/jwhisenant/hls/apple/bipbop/bipbopall.m3u8', type:'application/x-mpegURL'}]
+        src: [{src:'http://vjs.zencdn.net/v/oceans.mp4', type:'video/mp4'}]
       };
       mPlayer.ottPlayerLibrary.loadContent(content);
-      // mPlayer.src(content.src);
-      // mPlayer.ottPlayerLibrary.VMAPSrc(content.vmap);
-      // mPlayer.play();
     });
   </script>
 </body>
