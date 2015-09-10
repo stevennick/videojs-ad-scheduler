@@ -11,23 +11,24 @@
     "video",
     "player"
   ],
+  "repository": "stevennick/ott-ad-scheduler",
   "dependencies": {},
   "devDependencies": {
     "grunt-contrib-clean": "^0.4",
     "grunt-contrib-concat": "^0.3",
     "grunt-contrib-connect": "^0.10.1",
+    "grunt-contrib-copy": "^0.7.0",
     "grunt-contrib-jshint": "^0.6",
     "grunt-contrib-qunit": "^0.2",
     "grunt-contrib-uglify": "^0.2",
     "grunt-contrib-watch": "^0.4",
+    "grunt-mkdir": "^0.1.2",
     "grunt-newer": "^1.1.0",
+    "grunt-shell": "^1.1.2",
     "grunt-wiredep": "^2.0.0",
+    "load-grunt-config": "^0.17.2",
     "load-grunt-tasks": "^3.1.0",
     "qunitjs": "^1.12",
-    "time-grunt": "^1.2.0",
-    "video.js": "^4.5"
-  },
-  "peerDependencies": {
-    "video.js": "^4.5"
+    "time-grunt": "^1.2.0"
   }
 }

@@ -1,0 +1,43 @@
+init:
+  - 'shell:bower'
+  - 'compile_each'
+  - 'copylib'
+
+compile_each:
+  # - 'shell:videojs'
+  - 'shell:videojs_contrib_ads'
+  - 'shell:videojs_contrib_hls'
+  # - 'shell:videojs_contrib_media_sources'
+  # - 'shell:videojs_sublime_skin'
+  # - 'shell:vmap_client_js'
+  # - 'shell:vast_client_js'
+  #
+
+copylib:
+  - 'mkdir:mklibdir'
+  - 'shell:copylib'
+
+build:
+  - 'clean'
+  - 'wiredep'
+  - 'concat'
+  - 'uglify'
+
+test:
+  - 'clean'
+  - 'wiredep'
+  - 'jshint'
+  - 'qunit'
+
+serve:
+  - 'build'
+  - 'connect:dist:keepalive'
+  - 'clean:server'
+  - 'wiredep'
+  - 'connect:livereload'
+  - 'watch'
+
+default:
+  - 'newer:jshint'
+  # - 'test'
+  - 'build'

@@ -44,7 +44,7 @@
     //   return null;
     // }
     if (player.ottAdScheduler === undefined) {
-      window.console.error("This plugin require ott-ad-scheduler extensions, plugin not initialized.");
+      window.console.error('This plugin require ott-ad-scheduler extensions, plugin not initialized.');
       return null;
     } else {
       player.ottAdScheduler(settings);
@@ -54,7 +54,7 @@
     player.on('play', function() {
       var origPos = player.currentTime();
       var ratioFix = function() {
-        if ( origPos == player.currentTime() ) {
+        if ( origPos === player.currentTime() ) {
           // Do nothing
         } else {
           player.off('timeupdate', ratioFix);
@@ -67,38 +67,38 @@
     //
 
     player.ready(function(event) {
-      if (player.inAdMode == false && window[settings.jsNameSpace] != undefined) {
+      if (player.inAdMode === false && window[settings.jsNameSpace] !== undefined) {
         window[settings.jsNameSpace].onReady();
       }
     });
 
     player.on('timeupdate', function(event) {
-      if (player.inAdMode == false && window[settings.jsNameSpace] != undefined) {
+      if (player.inAdMode === false && window[settings.jsNameSpace] !== undefined) {
         window[settings.jsNameSpace].timeUpdateEvent(player.currentTime());
       }
     });
 
     player.on('durationchange', function(event) {
-      if (player.inAdMode == false && window[settings.jsNameSpace] != undefined) {
+      if (player.inAdMode === false && window[settings.jsNameSpace] !== undefined) {
         window[settings.jsNameSpace].updateDurationEvent(player.duration());
       }
     });
 
     player.on('adstart', function(event) {
-      if (window[settings.jsNameSpace] != undefined) {
+      if (window[settings.jsNameSpace] !== undefined) {
         window[settings.jsNameSpace].adStartEvent();
       }
     });
 
     player.on('adend', function(event) {
-      if (window[settings.jsNameSpace] != undefined) {
+      if (window[settings.jsNameSpace] !== undefined) {
         window[settings.jsNameSpace].adEndEvent();
       }
     });
 
     var onCompletion = function(event) {
-      console.log("OnCompletion Triggered by AD integration.");
-      if (player.inAdMode == false && window[settings.jsNameSpace] != undefined) {
+      // console.log('OnCompletion Triggered by AD integration.');
+      if (player.inAdMode === false && window[settings.jsNameSpace] !== undefined) {
         window[settings.jsNameSpace].onCompletion();
       }
     };
@@ -122,7 +122,7 @@
 //     });
 
     player.on('error', function(event) {
-      if (window[settings.jsNameSpace] != undefined) {
+      if (window[settings.jsNameSpace] !== undefined) {
         window[settings.jsNameSpace].onError(event);
       }
     });
@@ -151,8 +151,8 @@
       login: function(options, callback, errorCallback) {
         // var settings = videojs.util.mergeOptions(default, options);
         // For backward compatiable
-        options.url = options.url + "?" +$.param(options.data, false);
-        $.ajax({
+        options.url = options.url + '?' +jQuery.param(options.data, false);
+        jQuery.ajax({
           url: options.url,
           type: options.type,
           data: options.data,

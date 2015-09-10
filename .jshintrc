@@ -6,6 +6,6 @@
     "trailing" : true,
     "undef"    : true,
     "predef"   : [
-        "videojs"
+        "videojs", "DMVAST", "VMAP", "jQuery"
     ]
 }
