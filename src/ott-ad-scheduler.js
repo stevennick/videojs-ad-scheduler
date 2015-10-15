@@ -13,6 +13,8 @@
     // seconds before skip button shows, negative values to disable skip button altogether
     skipTime: 5,
     allowSkip: true,
+    startOffset: 0,
+    resumeSkipMidroll: false,
     debug: false
   },
   ottAdScheduler;
@@ -228,7 +230,11 @@
             __endIndex = index;
           } else {
             // adBreaksTimeArray.push(adBreaks[index].timeOffset);
-            sortedOffset.push(index);
+            if ((settings.startOffset > 0 && adBreaks[index].timeOffset < settings.startOffset) && settings.resumeSkipMidroll === true) {
+              // Skip put midroll ADs into array.
+            } else {
+              sortedOffset.push(index);
+            }
           }
         }
       }
@@ -241,9 +247,9 @@
         sortedOffset.push(__endIndex);
       }
 
-      if (settings.debug) {
-        videojs.log('ad-scheduler', 'Sorted :' + JSON.stringify(sortedOffset));
-      }
+      // if (settings.debug) {
+      //   videojs.log('ad-scheduler', 'Sorted :' + JSON.stringify(sortedOffset));
+      // }
 
       // Rebuild adBreaks
       var sortedAdBreaks = [];
@@ -252,14 +258,17 @@
         sortedAdBreaks.push(adBreaks[offset]);
         adBreaksTimeArray.push(adBreaks[offset].timeOffset);
       }
-      if (settings.debug) {
-        videojs.log('ad-scheduler', 'Original:' + JSON.stringify(adBreaks));
-      }
+      // if (settings.debug) {
+      //   videojs.log('ad-scheduler', 'Original:' + JSON.stringify(adBreaks));
+      // }
       adBreaks = sortedAdBreaks.slice();
-      if (settings.debug) {
-        videojs.log('ad-scheduler', 'Ordered: ' + JSON.stringify(adBreaks));
-      }
+      // if (settings.debug) {
+      //   videojs.log('ad-scheduler', 'Ordered: ' + JSON.stringify(adBreaks));
+      // }
       source = player.currentSrc();
+    if (settings.startOffset > 0) {
+      player.currentTime(settings.startOffset);
+    }
       player.on('timeupdate', timeUpdateHandle);
       player.off('ended', onCompletionHandle);
       player.one('ended', offTimeUpdateHandle);
@@ -346,6 +355,9 @@
       // Log current states.
       var originsrc = player.currentSrc();
       var originPos = player.currentTime();
+      if (currentAdBreak === 0 && settings.startOffset > 0) {
+        originPos = settings.startOffset;
+      }
       var originType = player.currentType();
       // Set to start AD Mode;
       player.ads.startLinearAdMode();
@@ -366,7 +378,7 @@
         player.ads.endLinearAdMode();
         //setup duration change event.
         // player.one('durationchange', updateLastAdBreak);
-        player.src([{src: originsrc, type: originType}]);
+        player.src([{src: originsrc, type: 'application/x-mpegURL'}]);
         // seeking for same tech
         player.currentTime(originPos);
 
@@ -461,7 +473,8 @@
           // player.trigger('vast-ready');
           setupEvents();
           if (settings.debug) {
-            videojs.log('ad-scheduler', 'startPlayAd with tracker: ' + JSON.stringify(player.vastTracker.trackingEvents));
+            // videojs.log('ad-scheduler', 'startPlayAd with tracker: ' + JSON.stringify(player.vastTracker.trackingEvents));
+            videojs.log('ad-scheduler', 'startPlayAd with tracker');
           }
         } else {
           player.trigger('adscanceled');
@@ -494,9 +507,9 @@
       // Do vast related operations
       // TODO: add error handle
 
-      if (settings.debug) {
-        videojs.log('ad-scheduler', JSON.stringify(vast));
-      }
+      // if (settings.debug) {
+      //   videojs.log('ad-scheduler', JSON.stringify(vast));
+      // }
       player.pause();
       if (settings.debug) {
         videojs.log('ad-scheduler', 'Play Ad break #' + (currentAdBreak + 1));
@@ -655,6 +668,34 @@
           return settings.allowSkip;
         } else {
           settings.allowSkip = allowSkip;
+          return player;
+        }
+      },
+
+      /**
+       * Allow player resume playback from given time offset, value must be in seconds. This startOffset function must call before loading actual content, otherwise, player offset may not operate corrected.
+       * @param  {[integer]} offset time offset in seconds
+       * @return {[type]}        Return current settings, or player object for chain use.
+       */
+      startOffset: function(offset) {
+        if (!offset) {
+          return settings.startOffset;
+        } else {
+          settings.startOffset = offset;
+          return player;
+        }
+      },
+
+      /**
+       * Allow control player to skip midrolls that setup before given startOffset. Preroll advertisements will not affected by this setting. This resumeSkipMidroll function must call before loading VMAP or will still not skip midroll ads.
+       * @param  {[Boolean]} option true for skip midrolls perior startoffset; false for not skip. If false, all midroll ads perior starOffset will play instantly before resume content playback.
+       * @return {[type]}        Return current settings, or player object for chain use.
+       */
+      resumeSkipMidroll: function(option) {
+        if(!option) {
+          return settings.resumeSkipMidroll;
+        } else {
+          settings.resumeSkipMidroll = option;
           return player;
         }
       },

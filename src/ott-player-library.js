@@ -148,6 +148,13 @@
     // replace initializer to adscheduler namespace.
     player.ottPlayerLibrary = {
 
+      /**
+       * player login for DRM decryption use.
+       * @param  {[type]}   options       [description]
+       * @param  {Function} callback      [description]
+       * @param  {[type]}   errorCallback [description]
+       * @return {[type]}                 [description]
+       */
       login: function(options, callback, errorCallback) {
         // var settings = videojs.util.mergeOptions(default, options);
         // For backward compatiable
@@ -162,6 +169,41 @@
         }).success(callback).fail(errorCallback);
       },
 
+      /**
+       * Allow player resume playback from given time offset, value must be in seconds. This startOffset function must call before loading actual content, otherwise, player offset may not operate corrected.
+       * @param  {[integer]} offset time offset in seconds
+       * @return {[type]}        Return current settings, or player object for chain use.
+       */
+      startOffset: function(offset) {
+        if (offset) {
+          player.ready(function() {
+            player.ottAdScheduler.startOffset(offset);
+          });
+        } else {
+          return player.ottAdScheduler.startOffset();
+        }
+      },
+
+      /**
+       * Allow control player to skip midrolls that setup before given startOffset. Preroll advertisements will not affected by this setting. This resumeSkipMidroll function must call before loading VMAP or will still not skip midroll ads.
+       * @param  {[Boolean]} option true for skip midrolls perior startoffset; false for not skip. If false, all midroll ads perior starOffset will play instantly before resume content playback.
+       * @return {[type]}        Return current settings, or player object for chain use.
+       */
+      resumeSkipMidroll: function(option) {
+        if (option) {
+          player.ready(function() {
+            player.ottAdScheduler.resumeSkipMidroll(option);
+          });
+        } else {
+          return player.ottAdScheduler.resumeSkipMidroll();
+        }
+      },
+
+      /**
+       * Load playback content and vmap content.
+       * @param  {Object} options for contents, with following format: {src:[{src: ..., type: ...}], vmap: '...'};
+       * @return {[type]}         [description]
+       */
       loadContent: function(options) {
         player.ready(function() {
           player.ottPlayerLibrary.VMAPSrc(options.vmap);

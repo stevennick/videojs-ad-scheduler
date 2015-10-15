@@ -85,8 +85,8 @@ module.exports = {
   // use precompiled version instead of source version
   vmap_client_js: {
     command: [
-      // 'npm run test',
-      // 'npm run bundle'
+      'npm test',
+      'npm run-script bundle'
     ].join('&&'),
     options: {
       stderr: true,
@@ -99,8 +99,8 @@ module.exports = {
   // use precompiled version instead of source version
   vast_client_js: {
     command: [
-      // 'npm run test',
-      // 'npm run bundle'
+      'npm test',
+      'npm run-script bundle'
     ].join('&&'),
     options: {
       stderr: true,
