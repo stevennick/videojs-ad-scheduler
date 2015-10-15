@@ -57,6 +57,18 @@ Default: 5 (Seconds)
 
 Allow user skip each ad content after ad content is played over specified seconds. This option will NOT override ad break instructions defined in VAST document if ad document setup is not skippable.
 
+#### startOffset (Optional)
+Type: `Integer`
+Default: 0 (Seconds)
+
+Allow player resume playback from given time offset, value must be in seconds. This startOffset function must call before loading actual content, otherwise, player offset may not operate corrected.
+
+#### resumeSkipMidroll (Optional)
+Type: `Boolean`
+Default: false
+
+Allow control player to skip midrolls that setup before given startOffset. Preroll advertisements will not affected by this setting. This resumeSkipMidroll function must call before loading VMAP or will still not skip midroll ads.
+
 ### Methods
 
 This plugin added options as same name methods, let user be able to change options in ad scheduler runtime. Once you retrieve the player runtime, use player.ottAdScheduler namespace to access them.
