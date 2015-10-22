@@ -210,7 +210,16 @@
      * @return {[type]}     [description]
      */
     var vmapCallback = function(ads) {
-      if (ads === undefined) { return; }
+      if (ads === undefined) {
+        // Run offset when playback.
+        if (settings.startOffset > 0) {
+          player.one('play', function() {
+            player.currentTime(settings.startOffset);
+            settings.startOffset = 0;
+          });
+        }
+        return;
+      }
       // parse all abreaks to determine if there has preroll AD
       // NOTE: player duration is zero until media is playing.
       var contentLength = player.duration();
@@ -266,9 +275,10 @@
       //   videojs.log('ad-scheduler', 'Ordered: ' + JSON.stringify(adBreaks));
       // }
       source = player.currentSrc();
-    if (settings.startOffset > 0) {
-      player.currentTime(settings.startOffset);
-    }
+      if (settings.startOffset > 0) {
+        player.currentTime(settings.startOffset);
+        settings.startOffset = 0;
+      }
       player.on('timeupdate', timeUpdateHandle);
       player.off('ended', onCompletionHandle);
       player.one('ended', offTimeUpdateHandle);
