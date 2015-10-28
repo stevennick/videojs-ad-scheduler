@@ -12,7 +12,7 @@
 <Impression><![CDATA[/example.html?ad/view]]></Impression>
 <Creatives>
     <Creative>
-        <Linear>
+        <Linear skipoffset="00:00:07">
             <Duration>00:00:30</Duration>
             <TrackingEvents>
                 <Tracking event="start"><![CDATA[/example.html?ad/tracking/?label=part2viewed]]></Tracking>
@@ -28,9 +28,11 @@
                 <Tracking event="fullscreen"><![CDATA[/example.html?ad/tracking/?label=adfullscreen]]></Tracking>
                 <Tracking event="acceptInvitation"><![CDATA[/example.html?ad/tracking/?label=acceptinvitation]]></Tracking>
                 <Tracking event="creativeView"><![CDATA[/example.html?ad/tracking/?label=vast_creativeview]]></Tracking>
+				<Tracking event="skip"><![CDATA[/example.html?ad/tracking/?label=skip]]></Tracking>
             </TrackingEvents>
             <VideoClicks>
                 <ClickThrough id="GDFP"><![CDATA[/example.html?ad/clicks/?adurl=http://www.microsoft.com]]></ClickThrough>
+				<ClickTracking id="GDFP"><![CDATA[/example.html?ad/tracking/?label=adclick]]></ClickTracking>
             </VideoClicks>
             <MediaFiles>
                 <MediaFile id="GDFP" delivery="progressive" bitrate="1230" width="852" height="480" type="video/webm" scalable="true" maintainAspectRatio="true">

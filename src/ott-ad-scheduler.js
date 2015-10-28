@@ -230,6 +230,7 @@
       var __endIndex;
       var sortedOffset = [];
       for (var index = 0; index < adBreaks.length; index++) {
+        // Handle timeOffset
         adBreaks[index].timeOffset = parseTimeOffset(adBreaks[index].timeOffset, adBreaks.length, contentLength);
         if (adBreaks[index].timeOffset > -2) {
           // save key into array
@@ -245,6 +246,10 @@
               sortedOffset.push(index);
             }
           }
+        }
+        // Initial trackingEvent
+        if (adBreaks[index].trackingEvent !== null) {
+          adBreaks[index].tracker = new VMAP.tracker(adBreaks[index].trackingEvent);
         }
       }
       // Insert start and end offsets
@@ -386,9 +391,12 @@
 
         player.inAdMode = false;
         player.ads.endLinearAdMode();
+        if (adBreaks[currentAdBreak - 1].trackingEvent !== null) {
+          adBreaks[currentAdBreak - 1].tracker.breakEnd();
+        }
         //setup duration change event.
         // player.one('durationchange', updateLastAdBreak);
-        player.src([{src: originsrc, type: 'application/x-mpegURL'}]);
+        player.src([{src: originsrc, type: originType}]);
         // seeking for same tech
         player.currentTime(originPos);
 
@@ -421,6 +429,9 @@
         player.off('ended' , nextOrEndAd);
         player.off('error', nextOrEndAd);
         // player.trigger('adend');
+
+        player.ottAdScheduler.blocker.parentNode.removeChild(player.ottAdScheduler.blocker);
+        player.ottAdScheduler.skipButton.parentNode.removeChild(player.ottAdScheduler.skipButton);
 
         if (adIndex >= adPlayList.length) {
           // No present AD to play
@@ -477,6 +488,7 @@
         if (settings.debug) {
           videojs.log('ad-scheduler', 'startPlayAd with src: ' + JSON.stringify(ado.src));
         }
+
         player.src(ado.src);
         player.vastTracker = new DMVAST.tracker(ado.ad, ado.creative);
         if (player.vastTracker) {
@@ -489,6 +501,93 @@
         } else {
           player.trigger('adscanceled');
         }
+
+        // clickable AD
+        var clickthrough;
+        if (player.vastTracker.clickThroughURLTemplate) {
+          clickthrough = DMVAST.util.resolveURLTemplates(
+            [player.vastTracker.clickThroughURLTemplate],
+            {
+              CACHEBUSTER: Math.round(Math.random() * 1.0e+10),
+              CONTENTPLAYHEAD: player.vastTracker.progressFormated()
+            }
+          )[0];
+        }
+
+        // click action and tracker handle
+        var blocker = window.document.createElement('a');
+        blocker.className = 'vast-blocker';
+        blocker.href = clickthrough || '#';
+        blocker.target = '_blank';
+        blocker.onclick = function() {
+          if (player.paused()) {
+            player.play();
+            return false;
+          }
+          var clicktrackers = player.vastTracker.clickTrackingURLTemplates;
+          if (clicktrackers) {
+            player.vastTracker.trackURLs(clicktrackers);
+          }
+          player.trigger('adclick');
+        };
+        player.ottAdScheduler.blocker = blocker;
+        player.el().insertBefore(blocker, player.controlBar.el());
+        // player.one('ended', function(){
+        //     player.ottAdScheduler.blocker.parentNode.removeChild(blocker);
+        // });
+        // end
+
+        // skippible ad
+        var skipButton = window.document.createElement('div');
+        skipButton.className = 'vast-skip-button';
+        if (!settings.allowSkip || player.vastTracker.skipDelay === 0) {
+          skipButton.style.display = 'none';
+        }
+        player.ottAdScheduler.skipButton = skipButton;
+        skipButton.onclick = function(e) {
+          if((' ' + player.ottAdScheduler.skipButton.className + ' ').indexOf(' enabled ') >= 0) {
+            player.vastTracker.skip();
+            player.pause();
+            player.trigger('ended');
+          }
+          if(window.Event.prototype.stopPropagation !== undefined) {
+            e.stopPropagation();
+          } else {
+            return false;
+          }
+        };
+        var nodes = player.el().childNodes;
+        var nodeIndex;
+        var controlBar;
+        for(nodeIndex = 0; nodeIndex < nodes.length; nodeIndex ++) {
+          if (nodes[nodeIndex].getAttribute('class') !== 'vjs-control-bar') {
+            continue;
+          } else {
+            controlBar = nodes[nodeIndex];
+            break;
+          }
+        }
+        player.el().insertBefore(skipButton, controlBar);
+
+        var adTimeupdate = function(e) {
+          var maxDelay = settings.skipTime > player.vastTracker.skipDelay ? settings.skipTime : player.vastTracker.skipDelay;
+          var timeLeft = Math.ceil(maxDelay - player.currentTime());
+          if(timeLeft > 0) {
+            player.ottAdScheduler.skipButton.innerHTML = 'You can skip ad in ' + timeLeft + '...';
+          } else {
+            if((' ' + player.ottAdScheduler.skipButton.className + ' ').indexOf(' enabled ') === -1){
+              player.ottAdScheduler.skipButton.className += ' enabled';
+              player.ottAdScheduler.skipButton.innerHTML = 'Skip this AD >>';
+            }
+          }
+        };
+
+        if (player.vastTracker.skipDelay !== null) {
+          player.on('timeupdate', adTimeupdate);
+        }
+
+        // end
+
         player.play();
         // player.trigger('adstart');
         player.one('ended' , nextOrEndAd);
@@ -497,6 +596,10 @@
 
       if (settings.debug) {
         videojs.log('ad-scheduler', 'Total ' + adPlayList.length + ' ads in this ad break.');
+      }
+
+      if (adPlayList.length === 0 && adBreaks[currentAdBreak - 1].trackingEvent !== null) {
+        adBreaks[currentAdBreak - 1].tracker.error();
       }
 
       if (adIndex === 0 && adPlayList.length > adIndex) {
@@ -523,6 +626,10 @@
       player.pause();
       if (settings.debug) {
         videojs.log('ad-scheduler', 'Play Ad break #' + (currentAdBreak + 1));
+      }
+      // BreakStart.
+      if (adBreaks[currentAdBreak].trackingEvent !== null) {
+        adBreaks[currentAdBreak].tracker.breakStart();
       }
       playVastAds(player, vast);
       currentAdBreak++;

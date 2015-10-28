@@ -89,7 +89,11 @@ This plugin added options as same name methods, let user be able to change optio
 2. cd into extracted folder.
 3. Setup environment:
 `npm install && bower install`
-4. Run demo locally:
+4. Build dependency libraries
+`grunt mkdir && grunt shell`
+5. Build distrubited version if scheduler:
+`grunt`
+6. Run demo locally:
 `grunt serve`
 
 ## Release History

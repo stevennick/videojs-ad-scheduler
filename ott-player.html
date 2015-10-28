@@ -14,6 +14,7 @@
   <!-- build:css(.tmp) styles/main.css -->
   <!-- endbuild -->
   <link rel="stylesheet" href="bower_components/videojs-contrib-ads/src/videojs.ads.css" />
+  <link rel="stylesheet" href="src/videojs.vast.css" />
 
   <style>
     html, body {
@@ -65,8 +66,8 @@
   <!-- js extensions out of bower auto management -->
 
   <!-- build:js({.tmp,lib}) scripts/scripts.js -->
-  <script src="lib/ott-ad-scheduler.js"></script>
-  <script src="lib/ott-player-library.js"></script>
+  <script src="src/ott-ad-scheduler.js"></script>
+  <script src="src/ott-player-library.js"></script>
   <!-- endbuild -->
   <script>
     var options = {
@@ -77,8 +78,8 @@
         ottPlayerLibrary: {
           debug: true,
           requestUrl: '',
-          skipTime: 5,
-          allowSkip: false
+          skipTime: 0,
+          allowSkip: true
         }
       }
     };

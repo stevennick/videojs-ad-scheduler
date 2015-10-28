@@ -85,13 +85,16 @@ module.exports = {
   // use precompiled version instead of source version
   vmap_client_js: {
     command: [
-      'npm test',
+      'npm install',
+      // below will failed under win32
+      // 'npm run-script test',
       'npm run-script bundle'
-    ].join('&&'),
+    ].join(' && '),
+    // command: 'grunt',
     options: {
       stderr: true,
       execOptions: {
-        cwd: './bower_components/vmap-clinet-js'
+        cwd: './bower_components/vmap-client-js'
       }
     }
   },
@@ -99,13 +102,16 @@ module.exports = {
   // use precompiled version instead of source version
   vast_client_js: {
     command: [
-      'npm test',
-      'npm run-script bundle'
-    ].join('&&'),
+      'npm install',
+      // below will failed under win32
+      // 'npm test',
+      // 'npm run-script bundle'
+    ].join(' && '),
+    // command: 'grunt',
     options: {
       stderr: true,
       execOptions: {
-        cwd: './bower_components/vast-clinet-js'
+        cwd: './bower_components/vast-client-js'
       }
     }
   },
