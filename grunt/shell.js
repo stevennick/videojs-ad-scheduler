@@ -85,10 +85,10 @@ module.exports = {
   // use precompiled version instead of source version
   vmap_client_js: {
     command: [
-      'npm install',
+      // 'npm install',
       // below will failed under win32
       // 'npm run-script test',
-      'npm run-script bundle'
+      // 'npm run-script bundle'
     ].join(' && '),
     // command: 'grunt',
     options: {
@@ -102,7 +102,7 @@ module.exports = {
   // use precompiled version instead of source version
   vast_client_js: {
     command: [
-      'npm install',
+      // 'npm install',
       // below will failed under win32
       // 'npm test',
       // 'npm run-script bundle'

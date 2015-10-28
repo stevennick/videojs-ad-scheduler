@@ -28,7 +28,9 @@ module.exports = {
     },
     files: [
       '<%= plugin.src %>/{,*/}*.js',
-      '<%= plugin.src %>/../ott-player.html'
+      '<%= plugin.src %>/../lib/{,*/}*',
+      '<%= plugin.src %>/../ott-player.html',
+      '<%= plugin.src %>/../dist-player.html'
     ]
   }
 };
