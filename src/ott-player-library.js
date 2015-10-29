@@ -58,7 +58,9 @@
           // Do nothing
         } else {
           player.off('timeupdate', ratioFix);
-          player.dimensions('99.9%');player.dimensions('100%');
+          var origSize = player.el().offsetWidth;
+          player.dimensions(origSize - 1);
+          player.dimensions(origSize);
         }
       };
       player.on('timeupdate', ratioFix);
