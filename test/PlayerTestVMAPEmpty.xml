@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<VMAP xmlns:vmap="http://www.iab.net/vmap-1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vast.xsd"
+    xmlns:psns="http://microsoft.com/namespace/playersequencer/iabExtensions.xsd"
+    version="1.0">
+
+
+</VMAP>

@@ -210,13 +210,11 @@
      * @return {[type]}     [description]
      */
     var vmapCallback = function(ads) {
-      if (ads === undefined) {
-        // Run offset when playback.
+      if (ads === null || typeof ads.AdBreaks === 'undefined' || ads.AdBreaks.length === 0) {
+        // Run offset once when playback.
         if (settings.startOffset > 0) {
-          player.one('play', function() {
-            player.currentTime(settings.startOffset);
-            settings.startOffset = 0;
-          });
+          player.currentTime(settings.startOffset);
+          settings.startOffset = 0;
         }
         return;
       }
@@ -648,6 +646,12 @@
         videojs.log('ad-scheduler', 'Main content: ' + player.currentTime() + ', next trigger: ' + adBreaks[currentAdBreak].timeOffset);
       }
 
+      // Run offset once when playback.
+      if (settings.startOffset > 0) {
+        player.currentTime(settings.startOffset);
+        settings.startOffset = 0;
+      }
+
       if (adBreaks[currentAdBreak].timeOffset > 0 && player.currentTime() > adBreaks[currentAdBreak].timeOffset) {
         if (settings.debug) {
           videojs.log('ad-scheduler', 'Main content trigger play Ad break #' + (currentAdBreak + 1));
@@ -748,14 +752,10 @@
       }
     };
 
+    // Main entry here
 
     // Hook time objects to determine if one of adbreak reached.
-    // player.on('contentupdate', function(contentUpdateEvent) { contentUpdateHandle(contentUpdateEvent); });
-    // player.on('timeupdate', function(timeUpadteEvent) { timeUpdateHandle(timeUpadteEvent); });
-    // player.on('play', function() {  });
     player.on('contentupdate', contentUpdateHandle);
-    // player.on('timeupdate', timeUpdateHandle);
-    // player.on('play', function() { /* Handle preroll if have */ });
     player.on('readyforpreroll', prerollHandle);
 
     // replace initializer to adscheduler namespace.

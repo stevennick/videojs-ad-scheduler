@@ -9,7 +9,7 @@
     "videojs-contrib-hls": "#0.17.1",
     "videojs-contrib-media-sources": "#1.0.0",
     "videojs-sublime-skin": "~1.0.2",
-    "vmap-client-js": "stevennick/vmap-client-js#0.0.1"
+    "vmap-client-js": "stevennick/vmap-client-js#~0.0.1"
   },
   "devDependencies": {
     "bootstrap": "~3.3.5"
