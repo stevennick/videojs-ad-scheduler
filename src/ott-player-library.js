@@ -60,7 +60,9 @@
           player.off('timeupdate', ratioFix);
           var origSize = player.el().offsetWidth;
           player.dimensions(origSize - 1);
-          player.dimensions(origSize);
+          setTimeout(function() {
+            player.dimensions(origSize);
+          }, 1);
         }
       };
       player.on('timeupdate', ratioFix);
