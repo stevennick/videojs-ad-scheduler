@@ -210,7 +210,7 @@
      * @return {[type]}     [description]
      */
     var vmapCallback = function(ads) {
-      if (ads === null || typeof ads.AdBreaks === 'undefined' || ads.AdBreaks.length === 0) {
+      if (ads === null || typeof ads.adbreaks === 'undefined' || ads.adbreaks.length === 0) {
         // Run offset once when playback.
         if (settings.startOffset > 0) {
           player.currentTime(settings.startOffset);
