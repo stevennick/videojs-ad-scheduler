@@ -210,11 +210,11 @@
      * @return {[type]}     [description]
      */
     var vmapCallback = function(ads) {
-      if (ads === null || typeof ads.adbreaks === 'undefined' || ads.adbreaks.length === 0) {
+      if (ads === null || typeof ads === 'undefined' || typeof ads.adbreaks === 'undefined' || ads.adbreaks.length === 0) {
         // Run offset once when playback.
         if (settings.startOffset > 0) {
           player.currentTime(settings.startOffset);
-          settings.startOffset = 0;
+          // settings.startOffset = 0;
         }
         return;
       }
@@ -280,7 +280,7 @@
       source = player.currentSrc();
       if (settings.startOffset > 0) {
         player.currentTime(settings.startOffset);
-        settings.startOffset = 0;
+        // settings.startOffset = 0;
       }
       player.on('timeupdate', timeUpdateHandle);
       player.off('ended', onCompletionHandle);
@@ -408,9 +408,14 @@
           }
         };
 
-        player.play().ready(function() {
-          player.on('timeupdate', forceToCurrentTime);
-        });
+        // Only execute auto play when playback is not end.
+        if (adBreaksTimeArray[currentAdBreak - 1] !== -1) {
+          // execute player play.
+          player.play().ready(function() {
+            player.on('timeupdate', forceToCurrentTime);
+          });
+        }
+
         // seeking for different tech (Hack). e.g., HLS (Flash backend) -> html5
         // player.one('timeupdate', function(event) {
         //   player.currentTime(originPos);

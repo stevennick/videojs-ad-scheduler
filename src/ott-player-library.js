@@ -51,24 +51,31 @@
     }
 
     // Hack: Fix aspectRatio error.
-    player.on('play', function() {
-      var origPos = player.currentTime();
-      var ratioFix = function() {
-        if ( origPos === player.currentTime() ) {
-          // Do nothing
-        } else {
-          player.off('timeupdate', ratioFix);
-          var origSize = player.el().offsetWidth;
-          player.dimensions(origSize - 1);
-          setTimeout(function() {
-            player.dimensions(origSize);
-          }, 1);
-        }
-      };
-      player.on('timeupdate', ratioFix);
+    player.ready(function(){
+      var pl = this;
+      // Get current player width
+      var width = pl.el().offsetWidth;
+      pl.on('play', function() {
+        var mwidth = width;
+        var origPos = player.currentTime();
+        var ratioFix = function() {
+          if (origPos < pl.currentTime()) {
+            player.off('timeupdate', ratioFix);
+            var twidth = mwidth;
+            var activeHack = function() {
+              var iWidth = twidth;
+              player.dimensions(iWidth - 1);
+              setTimeout(function() {
+                player.dimensions(iWidth);
+              }, 1);
+            };
+            setTimeout(activeHack, 100);
+          }
+        };
+        player.on('timeupdate', ratioFix);
+      });
     });
-
-    //
+    // Hack code end here.
 
     player.ready(function(event) {
       if (player.inAdMode === false && window[settings.jsNameSpace] !== undefined) {
