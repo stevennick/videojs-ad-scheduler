@@ -169,15 +169,52 @@
       login: function(options, callback, errorCallback) {
         // var settings = videojs.util.mergeOptions(default, options);
         // For backward compatiable
-        options.url = options.url + '?' +jQuery.param(options.data, false);
-        jQuery.ajax({
-          url: options.url,
-          type: options.type,
-          data: options.data,
-          xhrFields: {
-            withCredentials: options.withCredentials
+        var data = options.data;
+        var s = [];
+        var d = '';
+        var add = function( key, value ) {
+          value = typeof value === 'function' ? value() : (value === null ? '' : value);
+          s[ s.length ] = encodeURIComponent( key ) + '=' + encodeURIComponent( value );
+        };
+        // Below uses ECMAScript5 or newer.
+        var keys = Object.keys(data);
+        var index;
+        for(index = 0 ; index < keys.length ; index++) {
+          add( keys[index], data[keys[index]] );
+        }
+        // Rebuild query parameters.
+        for(index = 0 ; index < s.length ; index++) {
+          if(index === 0) {
+            d = s[index];
+          } else {
+            d = d + '&' + s[index];
           }
-        }).success(callback).fail(errorCallback);
+        }
+        //
+        var xhr = new XMLHttpRequest();
+        xhr.open(options.type, options.url, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        xhr.withCredentials = true;
+        xhr.onload = function() {
+          if (xhr.status >= 200 && xhr.status < 400) {
+            // Success!
+            var resp = xhr.responseText;
+            callback(resp);
+          } else {
+            // We reached our target server, but it returned an error
+          }
+        };
+        xhr.onerror = errorCallback;
+        xhr.send(d);
+        // options.url = options.url + '?' +jQuery.param(options.data, false);
+        // jQuery.ajax({
+        //   url: options.url,
+        //   type: options.type,
+        //   data: options.data,
+        //   xhrFields: {
+        //     withCredentials: options.withCredentials
+        //   }
+        // }).success(callback).fail(errorCallback);
       },
 
       /**

@@ -19,6 +19,7 @@ copylib:
 
 build:
   - 'clean'
+  - 'copylib'
   - 'wiredep'
   - 'concat'
   - 'uglify'

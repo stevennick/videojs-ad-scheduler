@@ -8,8 +8,6 @@ module.exports = {
   js: {
     // src: 'src/**/*.js',
     src: [
-    'lib/jquery.js',
-    'lib/bootstrap.js',
     'lib/vast-client.js',
     'lib/vmap-client.js',
     'lib/video.js',
@@ -22,10 +20,8 @@ module.exports = {
 
   css: {
     src: [
-    'lib/css/bootstrap.min.css',
     'lib/video-js.css',
     'lib/videojs.ads.css',
-    'lib/videojs-sublime-skin.css',
     'src/**/*.css'],
     dest: 'dist/<%= pkg.name %>.css'
   }

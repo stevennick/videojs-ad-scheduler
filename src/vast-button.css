@@ -36,3 +36,7 @@
     right: 0;
     bottom: 0;
 }
+
+.vjs-loading-spinner {
+    display: none  !important;
+}
