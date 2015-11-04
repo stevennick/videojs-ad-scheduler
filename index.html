@@ -8,11 +8,27 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link href="http://vjs.zencdn.net/4.12.15/video-js.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="static/videojs.ads.css">
+    <link rel="stylesheet" type="text/css" href="static/vast-button.css">
+    <style type="text/css">
+	.vjs-default-skin {
+		margin: auto;
+	}
+    </style>
   </head>
   <body>
     <section class="page-header">
       <h1 class="project-name">Ott-ad-scheduler</h1>
       <h2 class="project-tagline">Advertisement scheduler for video.js</h2>
+      <p class="project-tagline" style="text-align:center;">
+      <video id="video"
+	           class="video-js vjs-default-skin"
+	           height="264"
+	           width="634"
+	           controls>
+	  </video>
+      </p>
       <a href="https://github.com/stevennick/ott-ad-scheduler" class="btn">View on GitHub</a>
       <a href="https://github.com/stevennick/ott-ad-scheduler/zipball/master" class="btn">Download .zip</a>
       <a href="https://github.com/stevennick/ott-ad-scheduler/tarball/master" class="btn">Download .tar.gz</a>
@@ -170,6 +186,32 @@ Default: false</p>
 
     </section>
 
-  
+  <script src="http://vjs.zencdn.net/4.12.15/video.js"></script>
+  <script type="text/javascript" src="static/videojs.ads.js"></script>
+  <script type="text/javascript" src="static/vast-client.js"></script>
+  <script type="text/javascript" src="static/vmap-client.js"></script>
+  <script type="text/javascript" src="static/ott-ad-scheduler.js"></script>
+  <script>
+    var options = {
+      debug: false,
+      plugins: {
+        ads: {
+          debug: false
+        },
+        ottAdScheduler: {
+          debug: false,
+          requestUrl: 'https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/ad_rule_samples&ciu_szs=300x250&ad_rule=1&impl=s&gdfp_req=1&env=vp&output=vmap&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ar%3Dpremidpostoptimizedpod&cmsid=496&vid=short_onecue&correlator=',
+          skipTime: 5,
+          allowSkip: true
+        }
+      }
+    };
+    var player = videojs('video', options).ready(function() {
+      var mplayer = this;
+      // trigger contentupdate event
+      mplayer.src([{src:'http://video-js.zencoder.com/oceans-clip.mp4', type:'video/mp4'}]);
+      mplayer.play();
+    });
+  </script>
   </body>
 </html>
