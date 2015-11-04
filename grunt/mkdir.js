@@ -2,7 +2,7 @@ module.exports = {
 
   mklibdir: {
     options: {
-      mode: 0644,
+      mode: 0755,
       create: ['lib/fonts', 'lib/css', 'lib/font','lib/lang', 'dist', 'dist/font','dist/lang']
     }
   }
