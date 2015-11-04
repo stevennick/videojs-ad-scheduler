@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Ott-ad-scheduler by stevennick</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Ott-ad-scheduler</h1>
+      <h2 class="project-tagline">Advertisement scheduler for video.js</h2>
+      <a href="https://github.com/stevennick/ott-ad-scheduler" class="btn">View on GitHub</a>
+      <a href="https://github.com/stevennick/ott-ad-scheduler/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/stevennick/ott-ad-scheduler/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="ott-ad-scheduler" class="anchor" href="#ott-ad-scheduler" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ott Ad Scheduler</h1>
+
+<p>A advertisement schedule plugin for <a href="http://videojs.com">VideoJS</a>.
+With ad scheduler, the VideoJS player can accept VMAP v1.0.1 schedule document while content playing, enables player to play preroll, midroll, and postroll inline advertisements.</p>
+
+<blockquote>
+<p>Since this project is still under development, functions will change frequencies without notice.</p>
+</blockquote>
+
+<h2>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting Started</h2>
+
+<p>Before use plugin works with exist VideoJS enabled page, you'll needs external VAST&amp;VMAP parser for advertisement document information extraction. Here recommanded to use <a href="https://github.com/dailymotion/vast-client-js">vast-client-js</a> from dailymotion, and <a href="https://github.com/stevennick/vmap-client-js">vmap-client-js</a> created by me.
+This plugin also require <a href="https://github.com/videojs/videojs-contrib-ads">videojs-contrib-ads</a> plugin has installed.</p>
+
+<p>Once you've added the plugin script to your page, you can use it with any video:</p>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>video.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
+&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>videojs.ads.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
+&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>ott-ad-scheduler.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
+<span class="pl-s1">&lt;<span class="pl-ent">script</span>&gt;</span>
+<span class="pl-s1">  <span class="pl-k">var</span> options <span class="pl-k">=</span> {</span>
+<span class="pl-s1">    plugins<span class="pl-k">:</span> {</span>
+<span class="pl-s1">      ads<span class="pl-k">:</span> {}, <span class="pl-c">// For videojs-contrib-ads plugin required.</span></span>
+<span class="pl-s1">      ottAdScheduler<span class="pl-k">:</span> {</span>
+<span class="pl-s1">        serverUrl<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>test/PlayerTestVMAP.xml<span class="pl-pds">'</span></span>  <span class="pl-c">// One of the usage</span></span>
+<span class="pl-s1">      }</span>
+<span class="pl-s1">    }</span>
+<span class="pl-s1">  };</span>
+<span class="pl-s1">  videojs(<span class="pl-c1">document</span>.querySelector(<span class="pl-s"><span class="pl-pds">'</span>video<span class="pl-pds">'</span></span>), options, <span class="pl-c1">null</span>).ready(<span class="pl-k">function</span>() {</span>
+<span class="pl-s1">    <span class="pl-v">this</span>.src([{src<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">"</span>http://vjs.zencdn.net/v/oceans.mp4<span class="pl-pds">"</span></span>, type<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">"</span>video/mp4<span class="pl-pds">"</span></span>}]); <span class="pl-c">// don't forget to assign correct video MIME type</span></span>
+<span class="pl-s1">    <span class="pl-v">this</span>.ottAdScheduler.requestUrl(<span class="pl-s"><span class="pl-pds">'</span>test/PlayerTestVMAP.xml<span class="pl-pds">'</span></span>); <span class="pl-c">// Another usage to load VMAP document.</span></span>
+<span class="pl-s1">    <span class="pl-v">this</span>.play();</span>
+<span class="pl-s1">  });</span>
+<span class="pl-s1">&lt;/<span class="pl-ent">script</span>&gt;</span></pre></div>
+
+<p>You can also use regular video.js src function to assign media content. Once video played, VideoJS will schedule ad breaks and play ads described in VMAP/VAST documents.</p>
+
+<p>Please see the <a href="example.html">working example</a> of the plugin you can check out if you're having trouble.</p>
+
+<h2>
+<a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h2>
+
+<h3>
+<a id="plugin-options" class="anchor" href="#plugin-options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Plugin Options</h3>
+
+<p>You need pass in an options object to the plugin upon initialization. This
+object may contain any of the following properties:</p>
+
+<h4>
+<a id="requesturl-required" class="anchor" href="#requesturl-required" aria-hidden="true"><span class="octicon octicon-link"></span></a>requestUrl (Required)</h4>
+
+<p>Type: <code>String</code>
+Default: ""</p>
+
+<p>Setup VMAP request URL, which will used in content video.</p>
+
+<h4>
+<a id="allowskip-optional" class="anchor" href="#allowskip-optional" aria-hidden="true"><span class="octicon octicon-link"></span></a>allowSkip (Optional)</h4>
+
+<p>Type: <code>Boolean</code>
+Default: True</p>
+
+<p>Allow user skip each ad content. This option will NOT override ad break instructions defined in VAST document if ad document setup is not skippable.</p>
+
+<h4>
+<a id="skiptime-optional" class="anchor" href="#skiptime-optional" aria-hidden="true"><span class="octicon octicon-link"></span></a>skipTime (Optional)</h4>
+
+<p>Type: <code>Integer</code>
+Default: 5 (Seconds)</p>
+
+<p>Allow user skip each ad content after ad content is played over specified seconds. This option will NOT override ad break instructions defined in VAST document if ad document setup is not skippable.</p>
+
+<h4>
+<a id="startoffset-optional" class="anchor" href="#startoffset-optional" aria-hidden="true"><span class="octicon octicon-link"></span></a>startOffset (Optional)</h4>
+
+<p>Type: <code>Integer</code>
+Default: 0 (Seconds)</p>
+
+<p>Allow player resume playback from given time offset, value must be in seconds. This startOffset function must call before loading actual content, otherwise, player offset may not operate corrected.</p>
+
+<h4>
+<a id="resumeskipmidroll-optional" class="anchor" href="#resumeskipmidroll-optional" aria-hidden="true"><span class="octicon octicon-link"></span></a>resumeSkipMidroll (Optional)</h4>
+
+<p>Type: <code>Boolean</code>
+Default: false</p>
+
+<p>Allow control player to skip midrolls that setup before given startOffset. Preroll advertisements will not affected by this setting. This resumeSkipMidroll function must call before loading VMAP or will still not skip midroll ads.</p>
+
+<h3>
+<a id="methods" class="anchor" href="#methods" aria-hidden="true"><span class="octicon octicon-link"></span></a>Methods</h3>
+
+<p>This plugin added options as same name methods, let user be able to change options in ad scheduler runtime. Once you retrieve the player runtime, use player.ottAdScheduler namespace to access them.</p>
+
+<div class="highlight highlight-source-js"><pre>    player.ottAdScheduler.requestUrl();       <span class="pl-c">// Get current VMAP request URL</span>
+    player.ottAdScheduler.requestUrl(foo);    <span class="pl-c">// Setup VMAP request URL as foo</span></pre></div>
+
+<h2>
+<a id="development" class="anchor" href="#development" aria-hidden="true"><span class="octicon octicon-link"></span></a>Development</h2>
+
+<h3>
+<a id="requirement" class="anchor" href="#requirement" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirement</h3>
+
+<ul>
+<li>npm</li>
+<li>bower</li>
+<li>grunt</li>
+</ul>
+
+<h3>
+<a id="steps" class="anchor" href="#steps" aria-hidden="true"><span class="octicon octicon-link"></span></a>Steps</h3>
+
+<ol>
+<li>checkout project or <a href="archive/master.zip">download zip file</a>.</li>
+<li>cd into extracted folder.</li>
+<li>Setup environment:
+<code>npm install &amp;&amp; bower install</code>
+</li>
+<li>Build dependency libraries
+<code>grunt mkdir &amp;&amp; grunt shell</code>
+</li>
+<li>Build distrubited version if scheduler:
+<code>grunt</code>
+</li>
+<li>Run demo locally:
+<code>grunt serve</code>
+</li>
+</ol>
+
+<h2>
+<a id="release-history" class="anchor" href="#release-history" aria-hidden="true"><span class="octicon octicon-link"></span></a>Release History</h2>
+
+<ul>
+<li>0.0.2: Compassed version; remove jQuery, bootstrap, and external skin dependencies.</li>
+<li>0.0.1: Initial release.</li>
+</ul>
+
+<h2>
+<a id="author" class="anchor" href="#author" aria-hidden="true"><span class="octicon octicon-link"></span></a>Author</h2>
+
+<p>Stevennick Ciou</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/stevennick/ott-ad-scheduler">Ott-ad-scheduler</a> is maintained by <a href="https://github.com/stevennick">stevennick</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
