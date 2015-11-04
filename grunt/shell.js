@@ -24,9 +24,9 @@ module.exports = {
     command: [
       // 'npm install',
       // 'bower install',
-      'grunt clean',
-      'grunt concat',
-      'grunt uglify'
+      // 'grunt clean',
+      // 'grunt concat',
+      // 'grunt uglify'
     ].join(' && '),
     // command: 'grunt',
     options: {
@@ -133,7 +133,7 @@ module.exports = {
       'cp <%= bower_components %>/videojs/dist/video-js/lang/* ./lib/lang/',
       'cp -rf ./lib/font/* ./dist/font/',
       'cp -rf ./lib/lang/* ./dist/lang/',
-      'cp <%= bower_components %>/videojs-contrib-ads/dist/videojs.ads.js ./lib/',
+      'cp <%= bower_components %>/videojs-contrib-ads/src/videojs.ads.js ./lib/',
       'cp <%= bower_components %>/videojs-contrib-ads/src/videojs.ads.css ./lib/',
       'cp <%= bower_components %>/videojs-contrib-hls/dist/videojs.hls.js ./lib/',
       'cp <%= bower_components %>/videojs-contrib-media-sources/src/videojs-media-sources.js ./lib/',
