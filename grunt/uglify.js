@@ -3,7 +3,7 @@ module.exports = {
     banner: '<%= banner %>'
   },
   dist: {
-    src: '<%= concat.dist.dest %>',
+    src: '<%= concat.js.dest %>',
     dest: 'dist/<%= pkg.name %>.min.js'
   }
 };

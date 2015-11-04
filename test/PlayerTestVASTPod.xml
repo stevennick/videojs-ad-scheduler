@@ -12,7 +12,7 @@
 <Impression><![CDATA[/example.html?ad/view]]></Impression>
 <Creatives>
     <Creative>
-        <Linear skipoffset="00:00:07">
+        <Linear skipoffset="00:00:01">
             <Duration>00:00:30</Duration>
             <TrackingEvents>
                 <Tracking event="start"><![CDATA[/example.html?ad/tracking/?label=part2viewed]]></Tracking>

@@ -1,9 +1,11 @@
 module.exports = {
   options: {
+    separator: '\n',
     banner: '<%= banner %>',
     stripBanners: true
   },
-  dist: {
+
+  js: {
     // src: 'src/**/*.js',
     src: [
     'lib/jquery.js',
@@ -16,5 +18,15 @@ module.exports = {
     'lib/videojs.ads.js',
     'src/**/*.js'],
     dest: 'dist/<%= pkg.name %>.js'
+  },
+
+  css: {
+    src: [
+    'lib/css/bootstrap.min.css',
+    'lib/video-js.css',
+    'lib/videojs.ads.css',
+    'lib/videojs-sublime-skin.css',
+    'src/**/*.css'],
+    dest: 'dist/<%= pkg.name %>.css'
   }
 };

@@ -20,6 +20,7 @@ module.exports = {
       {expand: true, src:'<%= bower_components %>/videojs/dist/video-js/lang/*', dist: 'lib/lang/', filter: 'isFile'},
 
       {expand: true, src:'<%= bower_components %>/videojs-contrib-ads/dist/videojs.ads.js', dist: 'lib/', filter: 'isFile'},
+      {expand: true, src:'<%= bower_components %>/videojs-contrib-ads/dist/videojs.ads.css', dist: 'lib/', filter: 'isFile'},
       {expand: true, src:'<%= bower_components %>/videojs-contrib-hls/dist/videojs.hls.js', dist: 'lib/', filter: 'isFile'},
 
       {expand: true, src:'<%= bower_components %>/videojs-contrib-media-sources/src/videojs-media-sources.js', dist: 'lib/', filter: 'isFile'},

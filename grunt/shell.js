@@ -130,6 +130,7 @@ module.exports = {
       'cp <%= bower_components %>/videojs/dist/video-js/font/* ./lib/font/',
       'cp <%= bower_components %>/videojs/dist/video-js/lang/* ./lib/lang/',
       'cp <%= bower_components %>/videojs-contrib-ads/dist/videojs.ads.js ./lib/',
+      'cp <%= bower_components %>/videojs-contrib-ads/src/videojs.ads.css ./lib/',
       'cp <%= bower_components %>/videojs-contrib-hls/dist/videojs.hls.js ./lib/',
       'cp <%= bower_components %>/videojs-contrib-media-sources/src/videojs-media-sources.js ./lib/',
       'cp <%= bower_components %>/videojs-sublime-skin/dist/videojs-sublime-skin.css ./lib/',
