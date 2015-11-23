@@ -5,19 +5,19 @@
   'use strict';
 
   var defaults = {
-    // serverUrl: '',
-    // userId: '',
-    // contentId: '',
-    requestUrl: '',
-    option: true,
-    // seconds before skip button shows, negative values to disable skip button altogether
-    skipTime: 5,
-    allowSkip: true,
-    startOffset: 0,
-    resumeSkipMidroll: false,
-    debug: false
-  },
-  ottAdScheduler;
+      // serverUrl: '',
+      // userId: '',
+      // contentId: '',
+      requestUrl: '',
+      option: true,
+      // seconds before skip button shows, negative values to disable skip button altogether
+      skipTime: 5,
+      allowSkip: true,
+      startOffset: 0,
+      resumeSkipMidroll: false,
+      debug: false
+    },
+    ottAdScheduler;
 
   /**
    * Initialize the plugin.
@@ -28,7 +28,7 @@
     var settings = videojs.util.mergeOptions(defaults, options);
     var player = this;
 
-    if(player.ads === undefined) {
+    if (player.ads === undefined) {
       videojs.log.error('ad-scheduler', 'This plugin requires videojs-contrib-ads, plugin not initialized');
       return null;
     } else {
@@ -137,30 +137,34 @@
      * @return {Object}     parsed result for futher uses.
      */
     function parseURL(url) {
-      var a =  document.createElement('a');
+      var a = document.createElement('a');
       a.href = url;
       return {
         source: url,
-        protocol: a.protocol.replace(':','').toLowerCase(),
+        protocol: a.protocol.replace(':', '').toLowerCase(),
         host: a.hostname,
         port: a.port,
         query: a.search,
-        params: (function(){
+        params: (function() {
           var ret = {},
-            seg = a.search.replace(/^\?/,'').split('&'),
-            len = seg.length, i = 0, s;
-          for (;i<len;i++) {
-            if (!seg[i]) { continue; }
+            seg = a.search.replace(/^\?/, '').split('&'),
+            len = seg.length,
+            i = 0,
+            s;
+          for (; i < len; i++) {
+            if (!seg[i]) {
+              continue;
+            }
             s = seg[i].split('=');
             ret[s[0]] = s[1];
           }
           return ret;
         })(),
-        file: (a.pathname.match(/\/([^/?#]+)$/i) || [,''])[1],
-        hash: a.hash.replace('#',''),
-        path: a.pathname.replace(/^([^/])/,'/$1'),
-        relative: (a.href.match(/tps?:\/\/[^/]+(.+)/) || [,''])[1],
-        segments: a.pathname.replace(/^\//,'').split('/')
+        file: (a.pathname.match(/\/([^/?#]+)$/i) || [, ''])[1],
+        hash: a.hash.replace('#', ''),
+        path: a.pathname.replace(/^([^/])/, '/$1'),
+        relative: (a.href.match(/tps?:\/\/[^/]+(.+)/) || [, ''])[1],
+        segments: a.pathname.replace(/^\//, '').split('/')
       };
     }
 
@@ -265,7 +269,7 @@
 
       // Rebuild adBreaks
       var sortedAdBreaks = [];
-      for (var sortId = 0 ; sortId < sortedOffset.length; sortId++) {
+      for (var sortId = 0; sortId < sortedOffset.length; sortId++) {
         var offset = sortedOffset[sortId];
         sortedAdBreaks.push(adBreaks[offset]);
         adBreaksTimeArray.push(adBreaks[offset].timeOffset);
@@ -288,7 +292,7 @@
 
       if (adBreaksTimeArray[0] === 0) {
         // player.one('start', function(event) {
-          player.trigger('adsready');
+        player.trigger('adsready');
         // });
       } else {
         //setup duration change event.
@@ -332,34 +336,41 @@
 
       var adPlayList = [];
 
-      for(var vindex = 0; vindex < vast.ads.length; vindex++) {
+      for (var vindex = 0; vindex < vast.ads.length; vindex++) {
         var ad = vast.ads[vindex];
 
         for (var index = 0; index < ad.creatives.length; index++) {
           var creative = ad.creatives[index];
-          switch(creative.type) {
+          switch (creative.type) {
             case 'linear':
-            // Linear AD
-            // Select available player tech for playing
-            var adSource = [];
-            for (var typeIndex = 0; typeIndex < creative.mediaFiles.length; typeIndex++) {
-              var mediaFile = creative.mediaFiles[typeIndex];
-              adSource.push({type: mediaFile.mimeType, src: mediaFile.fileURL});
-              // TODO: Init tracker and attach events to player
-            }
-            // TODO: add external data (Tracker, etc...)
-            adPlayList.push({src: adSource, creative: creative, ad: ad});
+              // Linear AD
+              // Select available player tech for playing
+              var adSource = [];
+              for (var typeIndex = 0; typeIndex < creative.mediaFiles.length; typeIndex++) {
+                var mediaFile = creative.mediaFiles[typeIndex];
+                adSource.push({
+                  type: mediaFile.mimeType,
+                  src: mediaFile.fileURL
+                });
+                // TODO: Init tracker and attach events to player
+              }
+              // TODO: add external data (Tracker, etc...)
+              adPlayList.push({
+                src: adSource,
+                creative: creative,
+                ad: ad
+              });
 
-            break;
+              break;
             case 'non-linear':
-            // TODO
-            break;
+              // TODO
+              break;
             case 'companion':
-            // TODO
-            break;
+              // TODO
+              break;
             default:
-            // DO Nothing
-            break;
+              // DO Nothing
+              break;
           }
         }
       }
@@ -394,7 +405,10 @@
         }
         //setup duration change event.
         // player.one('durationchange', updateLastAdBreak);
-        player.src([{src: originsrc, type: originType}]);
+        player.src([{
+          src: originsrc,
+          type: originType
+        }]);
         // seeking for same tech
         player.currentTime(originPos);
 
@@ -429,12 +443,19 @@
 
         adIndex++;
         player.trigger('vast-removed');
-        player.off('ended' , nextOrEndAd);
+        player.off('ended', nextOrEndAd);
         player.off('error', nextOrEndAd);
         // player.trigger('adend');
 
-        player.ottAdScheduler.blocker.parentNode.removeChild(player.ottAdScheduler.blocker);
-        player.ottAdScheduler.skipButton.parentNode.removeChild(player.ottAdScheduler.skipButton);
+        if (player.ottAdScheduler.blocker.parentNode) {
+          player.ottAdScheduler.blocker.parentNode.removeChild(player.ottAdScheduler.blocker);
+          // player.ottAdScheduler.blocker = undefined;
+        }
+
+        if (player.ottAdScheduler.skipButton.parentNode) {
+          player.ottAdScheduler.skipButton.parentNode.removeChild(player.ottAdScheduler.skipButton);
+          // player.ottAdScheduler.skipButton = undefined;
+        }
 
         if (adIndex >= adPlayList.length) {
           // No present AD to play
@@ -452,7 +473,7 @@
           player.vastTracker.load();
         };
         var eventTimeUpdateHandle = function() {
-          if(isNaN(player.vastTracker.assetDuration)) {
+          if (isNaN(player.vastTracker.assetDuration)) {
             player.vastTracker.assetDuration = player.duration();
           }
           player.vastTracker.setProgress(player.currentTime());
@@ -464,7 +485,9 @@
           });
         };
         var eventErrHandle = function() {
-          DMVAST.util.track(player.vastTracker.ad.errorURLTemplates, {ERRORCODE: 405});
+          DMVAST.util.track(player.vastTracker.ad.errorURLTemplates, {
+            ERRORCODE: 405
+          });
           errorOccurred = true;
           player.trigger('ended');
         };
@@ -509,36 +532,37 @@
         var clickthrough;
         if (player.vastTracker.clickThroughURLTemplate) {
           clickthrough = DMVAST.util.resolveURLTemplates(
-            [player.vastTracker.clickThroughURLTemplate],
-            {
+            [player.vastTracker.clickThroughURLTemplate], {
               CACHEBUSTER: Math.round(Math.random() * 1.0e+10),
               CONTENTPLAYHEAD: player.vastTracker.progressFormated()
             }
           )[0];
         }
 
-        // click action and tracker handle
-        var blocker = window.document.createElement('a');
-        blocker.className = 'vast-blocker';
-        blocker.href = clickthrough || '#';
-        blocker.target = '_blank';
-        blocker.onclick = function() {
-          if (player.paused()) {
-            player.play();
-            return false;
-          }
-          var clicktrackers = player.vastTracker.clickTrackingURLTemplates;
-          if (clicktrackers) {
-            player.vastTracker.trackURLs(clicktrackers);
-          }
-          player.trigger('adclick');
-        };
-        player.ottAdScheduler.blocker = blocker;
-        player.el().insertBefore(blocker, player.controlBar.el());
-        // player.one('ended', function(){
-        //     player.ottAdScheduler.blocker.parentNode.removeChild(blocker);
-        // });
-        // end
+        if (clickthrough) {
+          // click action and tracker handle
+          var blocker = window.document.createElement('a');
+          blocker.className = 'vast-blocker';
+          blocker.href = clickthrough || '#';
+          blocker.target = '_blank';
+          blocker.onclick = function() {
+            if (player.paused()) {
+              player.play();
+              return false;
+            }
+            var clicktrackers = player.vastTracker.clickTrackingURLTemplates;
+            if (clicktrackers) {
+              player.vastTracker.trackURLs(clicktrackers);
+            }
+            player.trigger('adclick');
+          };
+          player.ottAdScheduler.blocker = blocker;
+          player.el().insertBefore(blocker, player.controlBar.el());
+          // player.one('ended', function(){
+          //     player.ottAdScheduler.blocker.parentNode.removeChild(blocker);
+          // });
+          // end
+        }
 
         // skippible ad
         var skipButton = window.document.createElement('div');
@@ -548,12 +572,13 @@
         }
         player.ottAdScheduler.skipButton = skipButton;
         skipButton.onclick = function(e) {
-          if((' ' + player.ottAdScheduler.skipButton.className + ' ').indexOf(' enabled ') >= 0) {
+          if ((' ' + player.ottAdScheduler.skipButton.className + ' ').indexOf(' enabled ') >= 0) {
+            // player.off('timeupdate', adTimeupdate);
             player.vastTracker.skip();
             player.pause();
             player.trigger('ended');
           }
-          if(window.Event.prototype.stopPropagation !== undefined) {
+          if (window.Event.prototype.stopPropagation !== undefined) {
             e.stopPropagation();
           } else {
             return false;
@@ -562,7 +587,7 @@
         var nodes = player.el().childNodes;
         var nodeIndex;
         var controlBar;
-        for(nodeIndex = 0; nodeIndex < nodes.length; nodeIndex ++) {
+        for (nodeIndex = 0; nodeIndex < nodes.length; nodeIndex++) {
           if (nodes[nodeIndex].getAttribute('class') !== 'vjs-control-bar') {
             continue;
           } else {
@@ -575,10 +600,10 @@
         var adTimeupdate = function(e) {
           var maxDelay = settings.skipTime > player.vastTracker.skipDelay ? settings.skipTime : player.vastTracker.skipDelay;
           var timeLeft = Math.ceil(maxDelay - player.currentTime());
-          if(timeLeft > 0) {
+          if (timeLeft > 0) {
             player.ottAdScheduler.skipButton.innerHTML = 'You can skip ad in ' + timeLeft + '...';
           } else {
-            if((' ' + player.ottAdScheduler.skipButton.className + ' ').indexOf(' enabled ') === -1){
+            if ((' ' + player.ottAdScheduler.skipButton.className + ' ').indexOf(' enabled ') === -1) {
               player.ottAdScheduler.skipButton.className += ' enabled';
               player.ottAdScheduler.skipButton.innerHTML = 'Skip this AD >>';
             }
@@ -593,7 +618,7 @@
 
         player.play();
         // player.trigger('adstart');
-        player.one('ended' , nextOrEndAd);
+        player.one('ended', nextOrEndAd);
         player.one('error', nextOrEndAd);
       };
 
@@ -645,7 +670,9 @@
      */
     var timeUpdateHandle = function(timeUpadteEvent) {
       // Skip if in ad mode or adbreaks is empty.
-      if (player.inAdMode === true || adBreaks === undefined || adBreaks[currentAdBreak] === undefined ) { return; }
+      if (player.inAdMode === true || adBreaks === undefined || adBreaks[currentAdBreak] === undefined) {
+        return;
+      }
 
       if (settings.debug) {
         videojs.log('ad-scheduler', 'Main content: ' + player.currentTime() + ', next trigger: ' + adBreaks[currentAdBreak].timeOffset);
@@ -814,7 +841,7 @@
        * @return {[type]}        Return current settings, or player object for chain use.
        */
       resumeSkipMidroll: function(option) {
-        if(!option) {
+        if (!option) {
           return settings.resumeSkipMidroll;
         } else {
           settings.resumeSkipMidroll = option;
