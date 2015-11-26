@@ -217,8 +217,21 @@
       if (ads === null || typeof ads === 'undefined' || typeof ads.adbreaks === 'undefined' || ads.adbreaks.length === 0) {
         // Run offset once when playback.
         if (settings.startOffset > 0) {
-          player.currentTime(settings.startOffset);
-          // settings.startOffset = 0;
+          // Since mobile device player will omit setTime function until source is ready and player is playing,
+          // we use timeupdate event to ensure soruce is loaded and delay 0.7 seconds to force seek work.
+          // 
+          // Below hacks is apply for iOS devices.
+          player.one('timeupdate', function() {
+            var mPlayer = player;
+            var offset = settings.startOffset;
+            setTimeout(function() {
+              mPlayer.currentTime(offset);
+              // settings.startOffset = 0;
+            }, 700);
+            // For other devices...
+            player.currentTime(settings.startOffset);
+            // settings.startOffset = 0;
+            });
         }
         return;
       }
@@ -283,8 +296,18 @@
       // }
       source = player.currentSrc();
       if (settings.startOffset > 0) {
-        player.currentTime(settings.startOffset);
-        // settings.startOffset = 0;
+        // Below hacks is apply for iOS devices.
+        player.one('timeupdate', function() {
+          var mPlayer = player;
+          var offset = settings.startOffset;
+          setTimeout(function() {
+            mPlayer.currentTime(offset);
+            // settings.startOffset = 0;
+          }, 700);
+          // For other devices...
+          player.currentTime(settings.startOffset);
+          // settings.startOffset = 0;
+        });
       }
       player.on('timeupdate', timeUpdateHandle);
       player.off('ended', onCompletionHandle);
