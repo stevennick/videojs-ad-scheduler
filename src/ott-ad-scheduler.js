@@ -4,6 +4,8 @@
 (function(window, videojs) {
   'use strict';
 
+  var iOS = /iPad|iPhone|iPod/.test(navigator.platform);
+
   var defaults = {
       // serverUrl: '',
       // userId: '',
@@ -29,7 +31,7 @@
     var player = this;
 
     if (player.ads === undefined) {
-      videojs.log.error('ad-scheduler', 'This plugin requires videojs-contrib-ads, plugin not initialized');
+      videojs.log.error('[ad-scheduler] This plugin requires videojs-contrib-ads, plugin not initialized');
       return null;
     } else {
       // Initialize ads framework
@@ -37,16 +39,16 @@
     }
 
     if (VMAP === undefined) {
-      videojs.log.error('ad-scheduler', 'This plugin requires vmap-client-js, plugin not initialized');
+      videojs.log.error('[ad-scheduler] This plugin requires vmap-client-js, plugin not initialized');
       return null;
     }
 
     if (DMVAST === undefined) {
-      videojs.log.error('ad-scheduler', 'This plugin requires vast-client-js, plugin not initialized');
+      videojs.log.error('[ad-scheduler] This plugin requires vast-client-js, plugin not initialized');
       return null;
     } else {
       if (DMVAST.client.parse === undefined) {
-        videojs.log.error('ad-scheduler', 'This plugin requires extra extensions managed by stevennick/vast-client-js, plugin not initialized');
+        videojs.log.error('[ad-scheduler] This plugin requires extra extensions managed by stevennick/vast-client-js, plugin not initialized');
         return null;
       }
     }
@@ -113,15 +115,15 @@
       } else if (time.search(/#\d+/) === 0 && contentLength !== undefined && adBreakSize !== undefined) {
         var position = parseInt(time.match(/\d+/)[0], 10);
         if (position === 0) {
-          videojs.log.error('ad-scheduler', 'Position can not be zero.');
+          videojs.log.error('[ad-scheduler] Position can not be zero.');
           return -100;
         } else if (position > adBreakSize) {
-          videojs.log.error('ad-scheduler', 'Position value is out of AdBreaks range.');
+          videojs.log.error('[ad-scheduler] Position value is out of AdBreaks range.');
           return -100;
         }
         value = ((position / adBreakSize) / 100) * contentLength;
       } else {
-        videojs.log.error('ad-scheduler', 'Error time format or not enough information to determine correct adbreak time.');
+        videojs.log.error('[ad-scheduler] Error time format or not enough information to determine correct adbreak time.');
         return -100;
       }
       return value;
@@ -208,14 +210,50 @@
       }
     };
 
-    // Since mobile device player will omit setTime function until source is ready and player is playing,
-    // we use timeupdate event to ensure soruce is loaded and continue force seek until video is seek to desired time.
-    var forceOffset = function(offset) {
+    /**
+     * Force apply offset until player is doing playback action.
+     *
+     * Since mobile device player will omit setTime function until source is ready and player is playing,
+     * we use timeupdate event to ensure soruce is loaded and continue force seek until video is seek to desired time.
+     *
+     * @return {[type]} [description]
+     */
+    var forceOffset = function() {
       if (player.currentTime() < settings.startOffset) {
         player.currentTime(settings.startOffset);
-      } else {
-        player.off('timeupdate', forceOffset);
+        if (settings.debug) {
+          videojs.log('[ad-scheduler] Force setup offset...');
+        }
       }
+      if (player.currentTime() > settings.startOffset) {
+        player.off('timeupdate', forceOffset);
+        settings.startOffset = 0;
+        if (settings.debug) {
+          videojs.log('[ad-scheduler] Complete setup offset.');
+        }
+      }
+    };
+
+    /**
+     * Apply startOffset to player. Using together with forceOffset function.
+     *
+     * Note: for iOS device, we must apply 1 second delay awaiting player ready.
+     *
+     * @return {null}
+     */
+    var applyStartOffset = function() {
+      // Below hacks is apply for iOS devices.
+      player.one('play', function() {
+        if (iOS) {
+          setTimeout(function() {
+            player.on('timeupdate', forceOffset);
+          }, 1000);
+        } else {
+          player.on('timeupdate', forceOffset);
+        }
+      });
+      // Other devices, trying to setup current Time.
+      player.currentTime(settings.startOffset);
     };
 
     /**
@@ -227,8 +265,7 @@
       if (ads === null || typeof ads === 'undefined' || typeof ads.adbreaks === 'undefined' || ads.adbreaks.length === 0) {
         // Run offset once when playback.
         if (settings.startOffset > 0) {
-          // Below hacks is apply for iOS devices.
-          player.on('timeupdate', forceOffset);
+          applyStartOffset();
         }
         return;
       }
@@ -293,8 +330,7 @@
       // }
       source = player.currentSrc();
       if (settings.startOffset > 0) {
-        // Below hacks is apply for iOS devices.
-        player.on('timeupdate', forceOffset);
+        applyStartOffset();
       }
       player.on('timeupdate', timeUpdateHandle);
       player.off('ended', onCompletionHandle);
@@ -398,14 +434,6 @@
 
       var adIndex = 0;
 
-      // var forcetoCurrentTime = function(event, originPos) {
-      //   if (player.currentTime() < originPos) {
-      //     player.currentTime(originPos);
-      //   } else {
-      //     player.off('timeupdate', forcetoCurrentTime);
-      //   }
-      // };
-
       var startPlayContent = function(event) {
 
         player.inAdMode = false;
@@ -425,7 +453,8 @@
         var forceToCurrentTime = function(event) {
           if (player.currentTime() < originPos) {
             player.currentTime(originPos);
-          } else {
+          }
+          if (player.currentTime() > originPos) {
             player.off('timeupdate', forceToCurrentTime);
             player.on('timeupdate', timeUpdateHandle);
             player.one('ended', offTimeUpdateHandle);
@@ -439,14 +468,6 @@
             player.on('timeupdate', forceToCurrentTime);
           });
         }
-
-        // seeking for different tech (Hack). e.g., HLS (Flash backend) -> html5
-        // player.one('timeupdate', function(event) {
-        //   player.currentTime(originPos);
-        //   player.on('timeupdate', timeUpdateHandle);
-        //   player.one('ended', offTimeUpdateHandle);
-        // });
-
       };
 
       var nextOrEndAd = function(event) {
@@ -522,7 +543,7 @@
         player.off('ended', offTimeUpdateHandle);
         player.inAdMode = true;
         if (settings.debug) {
-          videojs.log('ad-scheduler', 'startPlayAd with src: ' + JSON.stringify(ado.src));
+          videojs.log('[ad-scheduler] startPlayAd with src: ' + JSON.stringify(ado.src));
         }
 
         player.src(ado.src);
@@ -532,7 +553,7 @@
           setupEvents();
           if (settings.debug) {
             // videojs.log('ad-scheduler', 'startPlayAd with tracker: ' + JSON.stringify(player.vastTracker.trackingEvents));
-            videojs.log('ad-scheduler', 'startPlayAd with tracker');
+            videojs.log('[ad-scheduler] startPlayAd with tracker');
           }
         } else {
           player.trigger('adscanceled');
@@ -633,7 +654,7 @@
       };
 
       if (settings.debug) {
-        videojs.log('ad-scheduler', 'Total ' + adPlayList.length + ' ads in this ad break.');
+        videojs.log('[ad-scheduler] Total ' + adPlayList.length + ' ads in this ad break.');
       }
 
       if (adPlayList.length === 0 && adBreaks[currentAdBreak - 1].trackingEvent !== null) {
@@ -659,11 +680,11 @@
       // TODO: add error handle
 
       // if (settings.debug) {
-      //   videojs.log('ad-scheduler', JSON.stringify(vast));
+      //   videojs.log('[ad-scheduler] JSON.stringify(vast));
       // }
       player.pause();
       if (settings.debug) {
-        videojs.log('ad-scheduler', 'Play Ad break #' + (currentAdBreak + 1));
+        videojs.log('[ad-scheduler] Play Ad break #' + (currentAdBreak + 1));
       }
       // BreakStart.
       if (adBreaks[currentAdBreak].trackingEvent !== null) {
@@ -685,7 +706,7 @@
       }
 
       if (settings.debug) {
-        videojs.log('ad-scheduler', 'Main content: ' + player.currentTime() + ', next trigger: ' + adBreaks[currentAdBreak].timeOffset);
+        videojs.log('[ad-scheduler] Main content: ' + player.currentTime() + ', next trigger: ' + adBreaks[currentAdBreak].timeOffset);
       }
 
       // Run offset once when playback.
@@ -696,7 +717,7 @@
 
       if (adBreaks[currentAdBreak].timeOffset > 0 && player.currentTime() > adBreaks[currentAdBreak].timeOffset) {
         if (settings.debug) {
-          videojs.log('ad-scheduler', 'Main content trigger play Ad break #' + (currentAdBreak + 1));
+          videojs.log('[ad-scheduler] Main content trigger play Ad break #' + (currentAdBreak + 1));
         }
 
         player.off('timeupdate', timeUpdateHandle);
@@ -708,14 +729,14 @@
           player.inAdMode = true;
           var url = mergeURL(adBreaks[currentAdBreak].adTagURI, requestUrl);
           if (settings.debug) {
-            videojs.log('ad-scheduler', 'Access URL:' + url);
+            videojs.log('[ad-scheduler] Access URL:' + url);
           }
           DMVAST.client.get(url, null, vastCallback);
         }
       } else {
         if (adBreaks[currentAdBreak].timeOffset === -1) {
           if (settings.debug) {
-            videojs.log('ad-scheduler', 'Setup postroll handle');
+            videojs.log('[ad-scheduler] Setup postroll handle');
           }
           // Stop time update handle
           player.off('timeupdate', timeUpdateHandle);
@@ -735,7 +756,7 @@
     var prerollHandle = function(event) {
       player.pause();
       if (settings.debug) {
-        videojs.log('ad-scheduler', 'Preroll triggered.');
+        videojs.log('[ad-scheduler] Preroll triggered.');
       }
       player.off('timeupdate', timeUpdateHandle);
 
@@ -747,7 +768,7 @@
         player.inAdMode = true;
         var url = mergeURL(adBreaks[currentAdBreak].adTagURI, requestUrl);
         if (settings.debug) {
-          videojs.log('ad-scheduler', 'Access URL:' + url);
+          videojs.log('[ad-scheduler] Access URL:' + url);
         }
         DMVAST.client.get(url, null, vastCallback);
       }
@@ -761,7 +782,7 @@
      */
     var postrollHandle = function(event) {
       if (settings.debug) {
-        videojs.log('ad-scheduler', 'Postroll triggered.');
+        videojs.log('[ad-scheduler] Postroll triggered.');
       }
       player.off('timeupdate', timeUpdateHandle);
       player.off('ended', postrollHandle);
@@ -774,7 +795,7 @@
         player.inAdMode = true;
         var url = mergeURL(adBreaks[currentAdBreak].adTagURI, requestUrl);
         if (settings.debug) {
-          videojs.log('ad-scheduler', 'Access URL:' + url);
+          videojs.log('[ad-scheduler] Access URL:' + url);
         }
         DMVAST.client.get(url, null, vastCallback);
       }
@@ -783,13 +804,13 @@
     var offTimeUpdateHandle = function(event) {
       if (!this.hasPostroll) {
         if (settings.debug) {
-          videojs.log('ad-scheduler', 'Switch off time update handle.');
+          videojs.log('[ad-scheduler] Switch off time update handle.');
         }
         player.off('timeupdate', timeUpdateHandle);
         player.trigger('onCompletion');
       } else {
         if (settings.debug) {
-          videojs.log('ad-scheduler', 'Yield completion after postroll handle.');
+          videojs.log('[ad-scheduler] Yield completion after postroll handle.');
         }
       }
     };
