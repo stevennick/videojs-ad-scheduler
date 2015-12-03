@@ -329,9 +329,6 @@
       //   videojs.log('ad-scheduler', 'Ordered: ' + JSON.stringify(adBreaks));
       // }
       source = player.currentSrc();
-      if (settings.startOffset > 0) {
-        applyStartOffset();
-      }
       player.on('timeupdate', timeUpdateHandle);
       player.off('ended', onCompletionHandle);
       player.one('ended', offTimeUpdateHandle);
@@ -343,6 +340,9 @@
       } else {
         //setup duration change event.
         // player.one('durationchange', updateLastAdBreak);
+        if (settings.startOffset > 0 && !player.inAdMode) {
+          applyStartOffset();
+        }
       }
     };
 
