@@ -13,7 +13,7 @@ module.exports = {
 
       {expand: true, src:'<%= bower_components %>/vmap-client/vmap-client.js', dist: 'lib/', filter: 'isFile'},
 
-      {expand: true, src:'<%= bower_components %>/videojs/dist/video-js/video.js', dist: 'lib/', filter: 'isFile'},
+      {expand: true, src:'<%= bower_components %>/videojs/dist/video-js/video.dev.js', dist: 'lib/', filter: 'isFile'},
       {expand: true, src:'<%= bower_components %>/videojs/dist/video-js/video-js.swf', dist: 'lib/', filter: 'isFile'},
       {expand: true, src:'<%= bower_components %>/videojs/dist/video-js/video-js.css', dist: 'lib/', filter: 'isFile'},
       {expand: true, src:'<%= bower_components %>/videojs/dist/video-js/font/*', dist: 'lib/font/', filter: 'isFile'},

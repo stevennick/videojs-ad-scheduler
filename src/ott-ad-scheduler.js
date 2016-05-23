@@ -436,7 +436,6 @@
 
       var startPlayContent = function(event) {
 
-        player.inAdMode = false;
         player.ads.endLinearAdMode();
         if (adBreaks[currentAdBreak - 1].trackingEvent !== null) {
           adBreaks[currentAdBreak - 1].tracker.breakEnd();
@@ -460,6 +459,7 @@
             player.one('ended', offTimeUpdateHandle);
           }
         };
+        player.inAdMode = false;
 
         // Only execute auto play when playback is not end.
         if (adBreaksTimeArray[currentAdBreak - 1] !== -1) {

@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>OTT Web Player</title>
+    <link rel="stylesheet" type="text/css" href="dist/reset.css">
+    <link rel="stylesheet" type="text/css" href="dist/ott-ad-scheduler.min.css" />
+    <style>
+    html,
+    body {
+        font-family: Arial, sans-serif;
+        height: 100%;
+        background-color: black;
+    }
+
+    .container,
+    #video {
+        padding-right: 0px;
+        padding-left: 0px;
+        overflow-y: auto;
+        height: 100%;
+        width: 100%;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <video id="video" class="video-js vjs-default-skin" width="100%" height="100%" controls>
+            <p>
+                Your system doesn't support video. Please <a href="http://browsehappy.com/">upgrade your system</a> to see video.
+            </p>
+        </video>
+    </div>
+    <script src="dist/ott-ad-scheduler.min.js"></script>
+    <script src="dist/autoload.js"></script>
+</body>
+
+</html>

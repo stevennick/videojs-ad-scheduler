@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vmap:VMAP xmlns:vmap="http://www.iab.net/videosuite/vmap" version="1.0">
+  <vmap:AdBreak timeOffset="start" breakType="linear" breakId="preroll">
+    <vmap:AdSource id="preroll-ad" allowMultipleAds="false" followRedirects="true">
+      <AdTagURI templateType="vast3"><![CDATA[ http://demo.jwplayer.com/advertising/assets/support/preroll.xml]]></AdTagURI>
+    </vmap:AdSource>
+  </vmap:AdBreak>
+  <vmap:AdBreak timeOffset="50%" breakType="linear" breakId="overlay-1">
+    <vmap:AdSource id="overlay-1-ad" allowMultipleAds="false" followRedirects="true">
+      <AdTagURI templateType="vast3"><![CDATA[ http://demo.jwplayer.com/advertising/assets/support/midroll.xml]]></AdTagURI>
+    </vmap:AdSource>
+  </vmap:AdBreak>
+  <vmap:AdBreak timeOffset="end" breakType="linear" breakId="postroll">
+    <vmap:AdSource id="postroll-ad" allowMultipleAds="false" followRedirects="true">
+      <AdTagURI templateType="vast3"><![CDATA[http://demo.jwplayer.com/advertising/assets/support/postroll.xml]]></AdTagURI>
+    </vmap:AdSource>
+  </vmap:AdBreak>
+</vmap:VMAP>

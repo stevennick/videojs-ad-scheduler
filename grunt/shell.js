@@ -124,7 +124,7 @@ module.exports = {
       // 'cp <%= bower_components %>/jquery/dist/jquery.js ./lib/',
       'cp <%= bower_components %>/vast-client-js/vast-client.js ./lib/',
       'cp <%= bower_components %>/vmap-client-js/vmap-client.js ./lib/',
-      'cp <%= bower_components %>/videojs/dist/video-js/video.js ./lib/',
+      'cp <%= bower_components %>/videojs/dist/video-js/video.dev.js ./lib/',
       // 'cp <%= bower_components %>/videojs/dist/video-js/video-js.swf ./lib/',
       // 'cp <%= bower_components %>/videojs/dist/video-js/video-js.swf ./dist/',
       'cp ./lib/video-js.swf ./dist/',

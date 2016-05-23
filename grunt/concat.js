@@ -10,7 +10,7 @@ module.exports = {
     src: [
     'lib/vast-client.js',
     'lib/vmap-client.js',
-    'lib/video.js',
+    'lib/video.dev.js',
     'lib/videojs-media-sources.js',
     'lib/videojs.hls.js',
     'lib/videojs.ads.js',
