@@ -16,39 +16,39 @@
   ottPlayerLibrary;
 
   ottPlayerLibrary = function(options) {
-    var settings = videojs.util.mergeOptions(defaults, options);
+    var settings = videojs.mergeOptions(defaults, options);
     var player = this;
 
     // Check if necessarily libraries are loaded correctly.
-    if(player.ads === undefined) {
-      window.console.error('This plugin requires videojs-contrib-ads, plugin not initialized');
-      return null;
-    } else {
-      player.ads(options);
-    }
-    if (VMAP === undefined) {
-      window.console.error('This plugin requires vmap-client-js, plugin not initialized');
-      return null;
-    }
-    if (DMVAST === undefined) {
-      window.console.error('This plugin requires vast-client-js, plugin not initialized');
-      return null;
-    } else {
-      if (DMVAST.client.parse === undefined) {
-        window.console.error('This plugin requires extra extensions managed by stevennick/vast-client-js, plugin not initialized');
-        return null;
-      }
-    }
+    // if(player.ads === undefined) {
+    //   window.console.error('This plugin requires videojs-contrib-ads, plugin not initialized');
+    //   return null;
+    // } else {
+    //   player.ads(options);
+    // }
+    // if (VMAP === undefined) {
+    //   window.console.error('This plugin requires vmap-client-js, plugin not initialized');
+    //   return null;
+    // }
+    // if (DMVAST === undefined) {
+    //   window.console.error('This plugin requires vast-client-js, plugin not initialized');
+    //   return null;
+    // } else {
+    //   if (DMVAST.client.parse === undefined) {
+    //     window.console.error('This plugin requires extra extensions managed by stevennick/vast-client-js, plugin not initialized');
+    //     return null;
+    //   }
+    // }
     // if (player.hls === undefined) {
     //   window.console.error("This plugin require videojs-contrib-hls and videojs-contrib-media-sources extensions, plugin not initialized.");
     //   return null;
     // }
-    if (player.ottAdScheduler === undefined) {
-      window.console.error('This plugin require ott-ad-scheduler extensions, plugin not initialized.');
-      return null;
-    } else {
-      player.ottAdScheduler(settings);
-    }
+    // if (player.ottAdScheduler === undefined) {
+    //   window.console.error('This plugin require ott-ad-scheduler extensions, plugin not initialized.');
+    //   return null;
+    // } else {
+    //   player.ottAdScheduler(settings);
+    // }
 
     // Hack: Fix aspectRatio error.
     // player.ready(function(){
@@ -206,15 +206,6 @@
         };
         xhr.onerror = errorCallback;
         xhr.send(d);
-        // options.url = options.url + '?' +jQuery.param(options.data, false);
-        // jQuery.ajax({
-        //   url: options.url,
-        //   type: options.type,
-        //   data: options.data,
-        //   xhrFields: {
-        //     withCredentials: options.withCredentials
-        //   }
-        // }).success(callback).fail(errorCallback);
       },
 
       /**

@@ -5,7 +5,7 @@ module.exports = {
   },
   js: {
     files: ['<%= plugin.app %>/{,*/}*.js'],
-    tasks: ['newer:jshint:all'],
+    tasks: ['newer:jshint:all', 'wiredep'],
     options: {
       livereload: '<%= connect.options.livereload %>'
     }
@@ -16,7 +16,10 @@ module.exports = {
   },
   src: {
     files: '<%= jshint.src.src %>',
-    tasks: ['jshint:src', 'qunit']
+    tasks: ['jshint:src', 'qunit'],
+    options: {
+      livereload: '<%= connect.options.livereload %>'
+    }
   },
   test: {
     files: '<%= jshint.test.src %>',
@@ -30,6 +33,7 @@ module.exports = {
       '<%= plugin.src %>/{,*/}*.js',
       '<%= plugin.src %>/../lib/{,*/}*',
       '<%= plugin.src %>/../ott-player.html',
+      '<%= plugin.src %>/../example.html',
       '<%= plugin.src %>/../dist-player.html'
     ]
   }

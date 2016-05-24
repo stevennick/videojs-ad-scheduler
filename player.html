@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <title>OTT Web Player</title>
     <link rel="stylesheet" type="text/css" href="dist/reset.css">
-    <link rel="stylesheet" type="text/css" href="dist/ott-ad-scheduler.min.css" />
+    <link href="dist/video-js.css" rel="stylesheet">
     <style>
     html,
     body {
@@ -22,7 +22,12 @@
         height: 100%;
         width: 100%;
     }
+
+    .video-js .vjs-remaining-time-display {
+        display: none;
+    }
     </style>
+	<script src="dist/ie8/videojs-ie8.min.js"></script>
 </head>
 
 <body>
@@ -33,7 +38,8 @@
             </p>
         </video>
     </div>
-    <script src="dist/ott-ad-scheduler.min.js"></script>
+    <script src="dist/video.js"></script>
+    <script src="dist/videojs-contrib-hls.js"></script>
     <script src="dist/autoload.js"></script>
 </body>
 

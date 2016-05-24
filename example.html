@@ -5,7 +5,7 @@
   <title>Ott Ad Scheduler</title>
   <!-- build:css(.) styles/vendor.css -->
   <!-- bower:css -->
-  <link rel="stylesheet" href="bower_components/videojs/dist/video-js/video-js.css" />
+  <link rel="stylesheet" href="bower_components/video.js/dist/video-js.css" />
   <!-- endbower -->
   <!-- endbuild -->
   <!-- build:css(.tmp) styles/main.css -->
@@ -42,57 +42,77 @@
   </div>
   <div class="container">
     <video id="video"
-           class="video-js vjs-default-skin"
+           class="video-js vjs-default-skin vjs-big-play-centered"
            height="480"
            width="720"
            controls>
-      <p>
-        Your browser doesn't support video. Please <a href="http://browsehappy.com/">upgrade your browser</a> to see the example.
-      </p>
-      <!-- <source src="http://vjs.zencdn.net/v/oceans.mp4" type="video/mp4"> -->
-      <!-- <source src="http://vjs.zencdn.net/v/oceans.webm" type="video/webm"> -->
-      <!-- <source
-       src="http://solutions.brightcove.com/jwhisenant/hls/apple/bipbop/bipbopall.m3u8"
-       type="application/x-mpegURL"> -->
+      <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
     </video>
   </div>
 
   <!-- build:js(.) scripts/vendor.js -->
   <!-- bower:js -->
-  <script src="bower_components/vast-client-js/vast-client.js"></script>
-  <script src="bower_components/videojs/dist/video-js/video.js"></script>
-  <script src="bower_components/videojs-contrib-ads/src/videojs.ads.js"></script>
+  <script src="bower_components/video.js/dist/video.js"></script>
   <script src="bower_components/vmap-client-js/vmap-client.js"></script>
+  <script src="bower_components/vast-client-js/vast-client.js"></script>
+  <script src="bower_components/videojs-contrib-ads/src/videojs.ads.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
 
   <!-- js extensions out of bower auto management -->
+  <script src="bower_components/videojs-contrib-hls/dist/videojs-contrib-hls.js"></script>
   <!-- js extensions out of bower auto management -->
 
   <!-- build:js({.tmp,src}) scripts/scripts.js -->
-  <script src="src/ott-ad-scheduler.js"></script>
+  <!-- <script src="src/ott-ad-scheduler.js"></script> -->
+  <script src="src/ott-player-library.js"></script>
   <!-- endbuild -->
   <script>
     var options = {
       debug: true,
-      plugins: {
-        ads: {
-          debug: true
-        },
-        ottAdScheduler: {
-          debug: true,
-          requestUrl: 'test/PlayerTestVMAP.xml',
-          skipTime: 5,
-          allowSkip: true
+      html5: {
+        hls: {
+          withCredentials: false
         }
+      },
+      plugins: {
+        ottPlayerLibrary: {
+          debug: true
+        }
+        // ads: {
+        //   debug: true
+        // },
+        // ottAdScheduler: {
+        //   debug: true,
+        //   requestUrl: 'test/PlayerTestVMAP.xml',
+        //   skipTime: 5,
+        //   allowSkip: true
+        // }
+        // hls: {
+        //   withCredentials: true
+        // }
       }
     };
 
     var player = videojs('video', options).ready(function() {
       var mplayer = this;
-      // trigger contentupdate event
-      mplayer.src([{src:'http://vjs.zencdn.net/v/oceans.mp4', type:'video/mp4'}]);
-      mplayer.play();
+      var tech = mplayer.tech({ IWillNotUseThisInPlugins: true });
+      tech.on('loadstart', function(event) {
+          console.log("loadstart");
+          if(tech.hls != undefined) {
+            tech.hls.xhr.beforeRequest = function(options) {
+              // Only apply CROS cookie for key request, not for content
+              if (options.uri.match(/(\.ts|\.m3u8)$/gi) === null) {
+                options.withCredentials = true;
+              } else {
+                options.withCredentials = false;
+              }
+              return options;
+            };
+          }
+      });
+      mplayer.src([{src:'http://solutions.brightcove.com/jwhisenant/hls/apple/bipbop/bipbopall.m3u8', type:'application/x-mpegURL'}]);
+      // mplayer.play();
     });
   </script>
 </body>

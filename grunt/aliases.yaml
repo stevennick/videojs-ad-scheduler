@@ -4,8 +4,8 @@ init:
   - 'copylib'
 
 compile_each:
-  # - 'shell:videojs'
-  - 'shell:videojs_contrib_ads'
+  - 'shell:videojs'
+  # - 'shell:videojs_contrib_ads'
   - 'shell:videojs_contrib_hls'
   # - 'shell:videojs_contrib_media_sources'
   # - 'shell:videojs_sublime_skin'
@@ -40,6 +40,7 @@ serve:
   - 'watch'
 
 default:
+  # - 'init'
   - 'newer:jshint'
   # - 'test'
   - 'build'

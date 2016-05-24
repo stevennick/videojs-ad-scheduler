@@ -14,7 +14,7 @@ module.exports = {
     options: {
       stderr: true,
       execOptions: {
-        cwd: './bower_components/videojs'
+        cwd: './bower_components/video.js'
       }
     }
   },
@@ -22,11 +22,9 @@ module.exports = {
   // Since bower version does not contains jshintrc, we can only define each tasks sepaeately.
   videojs_contrib_ads: {
     command: [
-      // 'npm install',
+      'npm install',
       // 'bower install',
-      // 'grunt clean',
-      // 'grunt concat',
-      // 'grunt uglify'
+      'grunt'
     ].join(' && '),
     // command: 'grunt',
     options: {
@@ -40,8 +38,7 @@ module.exports = {
   videojs_contrib_hls: {
     command: [
       'npm install',
-      'bower install',
-      'grunt'
+      'npm run-script build'
     ].join('&&'),
     // command: 'grunt',
     options: {
@@ -122,21 +119,24 @@ module.exports = {
       // 'cp <%= bower_components %>/bootstrap/dist/fonts/* ./lib/fonts/',
       // 'cp <%= bower_components %>/bootstrap/dist/css/*.min.css ./lib/css/',
       // 'cp <%= bower_components %>/jquery/dist/jquery.js ./lib/',
-      'cp <%= bower_components %>/vast-client-js/vast-client.js ./lib/',
-      'cp <%= bower_components %>/vmap-client-js/vmap-client.js ./lib/',
-      'cp <%= bower_components %>/videojs/dist/video-js/video.dev.js ./lib/',
-      // 'cp <%= bower_components %>/videojs/dist/video-js/video-js.swf ./lib/',
+      // 'cp <%= bower_components %>/vast-client-js/vast-client.js ./lib/',
+      // 'cp <%= bower_components %>/vmap-client-js/vmap-client.js ./lib/',
+      // 'cp <%= bower_components %>/videojs/dist/video-js/video.dev.js ./lib/',
+      'cp <%= bower_components %>/video.js/dist/video-js.swf ./lib/',
+      'cp <%= bower_components %>/video.js/dist/video-js.swf ./dist/',
       // 'cp <%= bower_components %>/videojs/dist/video-js/video-js.swf ./dist/',
-      'cp ./lib/video-js.swf ./dist/',
-      'cp <%= bower_components %>/videojs/dist/video-js/video-js.css ./lib/',
-      'cp <%= bower_components %>/videojs/dist/video-js/font/* ./lib/font/',
-      'cp <%= bower_components %>/videojs/dist/video-js/lang/* ./lib/lang/',
+      // 'cp ./lib/video-js.swf ./dist/',
+      'cp <%= bower_components %>/video.js/dist/video.js ./lib/',
+      'cp <%= bower_components %>/video.js/dist/font/* ./lib/font/',
+      'cp <%= bower_components %>/video.js/dist/lang/* ./lib/lang/',
+      'cp <%= bower_components %>/video.js/dist/ie8/* ./lib/ie8/',
+      'cp <%= bower_components %>/video.js/dist/video-js.css ./lib/',
       'cp -rf ./lib/font/* ./dist/font/',
       'cp -rf ./lib/lang/* ./dist/lang/',
-      'cp <%= bower_components %>/videojs-contrib-ads/src/videojs.ads.js ./lib/',
-      'cp <%= bower_components %>/videojs-contrib-ads/src/videojs.ads.css ./lib/',
-      'cp <%= bower_components %>/videojs-contrib-hls/dist/videojs.hls.js ./lib/',
-      'cp <%= bower_components %>/videojs-contrib-media-sources/src/videojs-media-sources.js ./lib/',
+      // 'cp <%= bower_components %>/videojs-contrib-ads/src/videojs.ads.js ./lib/',
+      // 'cp <%= bower_components %>/videojs-contrib-ads/src/videojs.ads.css ./lib/',
+      'cp <%= bower_components %>/videojs-contrib-hls/dist/videojs-contrib-hls.js ./lib/',
+      // 'cp <%= bower_components %>/videojs-contrib-media-sources/src/videojs-media-sources.js ./lib/',
       // 'cp <%= bower_components %>/videojs-sublime-skin/dist/videojs-sublime-skin.css ./lib/',
     ].join('&&')
   }

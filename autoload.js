@@ -9,21 +9,32 @@ function getParameterByName(name, url) {
 }
 
 var options = {
-    flash: {
-        swf: 'dist/video-js.swf'
-    },
-    poster: 'dist/black_128.png',
-    plugins: {
-        ottPlayerLibrary: {
-            requestUrl: '',
-            skipTime: 0,
-            allowSkip: true
+    debug: true,
+    html5: {
+        hls: {
+            withCredentials: false
         }
-    }
+    },
 };
 
 var player = videojs('video', options).ready(function() {
     var mPlayer = this;
+    var tech = mPlayer.tech({
+        IWillNotUseThisInPlugins: true
+    });
+    tech.on('loadstart', function(event) {
+        if (tech.hls != undefined) {
+            tech.hls.xhr.beforeRequest = function(options) {
+                // Only apply CROS cookie for key request, not for content
+                if (options.uri.match(/(\.ts|\.m3u8)$/gi) === null) {
+                    options.withCredentials = true;
+                } else {
+                    options.withCredentials = false;
+                }
+                return options;
+            };
+        }
+    });
     var videoSrc = getParameterByName('vSrc');
     var mapSrc = getParameterByName('mapSrc');
     if (mapSrc == null) {
@@ -37,6 +48,7 @@ var player = videojs('video', options).ready(function() {
                 type: 'application/x-mpegURL'
             }]
         };
-        mPlayer.ottPlayerLibrary.loadContent(content);
+        mPlayer.src(content.src);
+        mPlayer.play();
     }
 });
