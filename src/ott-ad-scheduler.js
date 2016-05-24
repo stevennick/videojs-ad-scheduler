@@ -27,7 +27,7 @@
    */
   ottAdScheduler = function(options) {
 
-    var settings = videojs.util.mergeOptions(defaults, options);
+    var settings = videojs.mergeOptions(defaults, options);
     var player = this;
 
     if (player.ads === undefined) {
@@ -35,7 +35,7 @@
       return null;
     } else {
       // Initialize ads framework
-      // player.ads();
+      player.ads({debug: settings.debug});
     }
 
     if (VMAP === undefined) {
@@ -267,6 +267,7 @@
         if (settings.startOffset > 0) {
           applyStartOffset();
         }
+        player.trigger('adsready');
         return;
       }
       // parse all abreaks to determine if there has preroll AD
@@ -305,9 +306,13 @@
       sortedOffset.sort();
       if (__startIndex !== undefined) {
         sortedOffset.unshift(__startIndex);
+      } else {
+        player.trigger('nopreroll');
       }
       if (__endIndex !== undefined) {
         sortedOffset.push(__endIndex);
+      } else {
+        player.trigger('nopostroll');
       }
 
       // if (settings.debug) {
@@ -325,25 +330,18 @@
       //   videojs.log('ad-scheduler', 'Original:' + JSON.stringify(adBreaks));
       // }
       adBreaks = sortedAdBreaks.slice();
-      // if (settings.debug) {
-      //   videojs.log('ad-scheduler', 'Ordered: ' + JSON.stringify(adBreaks));
-      // }
+      if (settings.debug) {
+        videojs.log('ad-scheduler', 'Ordered: ' + JSON.stringify(adBreaks));
+      }
       source = player.currentSrc();
       player.on('timeupdate', timeUpdateHandle);
       player.off('ended', onCompletionHandle);
       player.one('ended', offTimeUpdateHandle);
 
-      if (adBreaksTimeArray[0] === 0) {
-        // player.one('start', function(event) {
-        player.trigger('adsready');
-        // });
-      } else {
-        //setup duration change event.
-        // player.one('durationchange', updateLastAdBreak);
-        if (settings.startOffset > 0 && !player.inAdMode) {
-          applyStartOffset();
-        }
+      if (settings.startOffset > 0 && !player.inAdMode) {
+        applyStartOffset();
       }
+      player.trigger('adsready');
     };
 
     var setNewContent = function(contentUpdate) {
@@ -351,7 +349,7 @@
       if (!player.inAdMode && settings.requestUrl !== undefined) {
         // Load AD URL
         // var requestUrl = settings.serverUrl + '?uid=' + encodeURIComponent(settings.userId) + "&cid=" + encodeURIComponent(settings.contentId);
-        player.on('ended', onCompletionHandle);
+        // player.on('ended', onCompletionHandle);
         var inst = VMAP.client.get(settings.requestUrl, null, vmapCallback);
       }
     };
@@ -424,11 +422,11 @@
 
       // Log current states.
       var originsrc = player.currentSrc();
+      var origintype = player.currentType();
       var originPos = player.currentTime();
       if (currentAdBreak === 0 && settings.startOffset > 0) {
         originPos = settings.startOffset;
       }
-      var originType = player.currentType();
       // Set to start AD Mode;
       player.ads.startLinearAdMode();
 
@@ -442,31 +440,41 @@
         }
         //setup duration change event.
         // player.one('durationchange', updateLastAdBreak);
-        player.src([{
-          src: originsrc,
-          type: originType
-        }]);
-        // seeking for same tech
-        player.currentTime(originPos);
+        // player.src([{
+        //   src: originsrc,
+        //   type: origintype
+        // }]);
+        // // seeking for same tech
+        // player.currentTime(originPos);
 
-        var forceToCurrentTime = function(event) {
-          if (player.currentTime() < originPos) {
-            player.currentTime(originPos);
-          }
-          if (player.currentTime() > originPos) {
-            player.off('timeupdate', forceToCurrentTime);
-            player.on('timeupdate', timeUpdateHandle);
-            player.one('ended', offTimeUpdateHandle);
-          }
-        };
+        // var forceToCurrentTime = function(event) {
+        //   if (player.currentTime() < originPos) {
+        //     player.currentTime(originPos);
+        //   }
+        //   if (player.currentTime() > originPos) {
+        //     player.off('timeupdate', forceToCurrentTime);
+        //     player.on('timeupdate', timeUpdateHandle);
+        //     player.one('ended', offTimeUpdateHandle);
+        //   }
+        // };
         player.inAdMode = false;
 
         // Only execute auto play when playback is not end.
+        // if (adBreaksTimeArray[currentAdBreak - 1] !== -1) {
+        //   // execute player play.
+        //   player.play().ready(function() {
+        //     player.on('timeupdate', forceToCurrentTime);
+        //   });
+        // }
         if (adBreaksTimeArray[currentAdBreak - 1] !== -1) {
           // execute player play.
           player.play().ready(function() {
-            player.on('timeupdate', forceToCurrentTime);
+            player.on('timeupdate', timeUpdateHandle);
           });
+        } else {
+          player.currentTime(originPos);
+          player.off('timeupdate', timeUpdateHandle);
+          player.pause();
         }
       };
 
@@ -474,8 +482,8 @@
 
         adIndex++;
         player.trigger('vast-removed');
-        player.off('ended', nextOrEndAd);
-        player.off('error', nextOrEndAd);
+        player.off('adended', nextOrEndAd);
+        player.off('aderror', nextOrEndAd);
         // player.trigger('adend');
 
         if (player.ottAdScheduler.blocker.parentNode) {
@@ -523,16 +531,16 @@
           player.trigger('ended');
         };
 
-        player.on('canplay', eventCanPlayHandle);
-        player.on('timeupdate', eventTimeUpdateHandle);
-        player.on('pause', eventPauseHandle);
-        player.on('error', eventErrHandle);
+        player.on('adcanplay', eventCanPlayHandle);
+        player.on('adtimeupdate', eventTimeUpdateHandle);
+        player.on('adpause', eventPauseHandle);
+        player.on('aderror', eventErrHandle);
 
         player.one('vast-removed', function() {
-          player.off('pause', eventPauseHandle);
-          player.off('canplay', eventCanPlayHandle);
-          player.off('timeupdate', eventTimeUpdateHandle);
-          player.off('error', eventErrHandle);
+          player.off('adpause', eventPauseHandle);
+          player.off('adcanplay', eventCanPlayHandle);
+          player.off('adtimeupdate', eventTimeUpdateHandle);
+          player.off('aderror', eventErrHandle);
           if (!errorOccurred) {
             player.vastTracker.complete();
           }
@@ -552,8 +560,8 @@
           // player.trigger('vast-ready');
           setupEvents();
           if (settings.debug) {
-            // videojs.log('ad-scheduler', 'startPlayAd with tracker: ' + JSON.stringify(player.vastTracker.trackingEvents));
-            videojs.log('[ad-scheduler] startPlayAd with tracker');
+            videojs.log('[ad-scheduler]', 'startPlayAd with tracker: ' + JSON.stringify(player.vastTracker.trackingEvents));
+            // videojs.log('[ad-scheduler] startPlayAd with tracker');
           }
         } else {
           player.trigger('adscanceled');
@@ -607,13 +615,17 @@
             // player.off('timeupdate', adTimeupdate);
             player.vastTracker.skip();
             player.pause();
-            player.trigger('ended');
+            if (settings.debug) {
+              videojs.log('[ad-scheduler] Ad has been skipped by user push skip button.');
+            }
+            player.trigger('adended');
+            // player.trigger('adscanceled');
           }
-          if (window.Event.prototype.stopPropagation !== undefined) {
-            e.stopPropagation();
-          } else {
-            return false;
-          }
+          // if (window.Event.prototype.stopPropagation !== undefined) {
+          //   e.stopPropagation();
+          // } else {
+          //   return false;
+          // }
         };
         var nodes = player.el().childNodes;
         var nodeIndex;
@@ -642,15 +654,15 @@
         };
 
         if (player.vastTracker.skipDelay !== null) {
-          player.on('timeupdate', adTimeupdate);
+          player.on('adtimeupdate', adTimeupdate);
         }
 
         // end
 
         player.play();
         // player.trigger('adstart');
-        player.one('ended', nextOrEndAd);
-        player.one('error', nextOrEndAd);
+        player.one('adended', nextOrEndAd);
+        player.one('aderror', nextOrEndAd);
       };
 
       if (settings.debug) {
@@ -742,7 +754,7 @@
           player.off('timeupdate', timeUpdateHandle);
           // Setup Postroll
           this.hasPostroll = true;
-          player.one('ended', postrollHandle);
+          player.one('contentended', postrollHandle);
         }
       }
       // Make sure setup postroll only when there is only one ad break for postroll.
@@ -754,11 +766,11 @@
      * @return {[type]}       [description]
      */
     var prerollHandle = function(event) {
-      player.pause();
+      // player.pause();
       if (settings.debug) {
         videojs.log('[ad-scheduler] Preroll triggered.');
       }
-      player.off('timeupdate', timeUpdateHandle);
+      // player.off('timeupdate', timeUpdateHandle);
 
       // Prepare for AD time
       if (adBreaks[currentAdBreak].isWrapper === false && adBreaks[currentAdBreak].vastAdData !== undefined) {
@@ -772,7 +784,6 @@
         }
         DMVAST.client.get(url, null, vastCallback);
       }
-      // player.trigger('adsready');
     };
 
     /**
@@ -785,7 +796,7 @@
         videojs.log('[ad-scheduler] Postroll triggered.');
       }
       player.off('timeupdate', timeUpdateHandle);
-      player.off('ended', postrollHandle);
+      player.off('contentended', postrollHandle);
       this.hasPostroll = false;
       // Prepare for AD time
       if (adBreaks[currentAdBreak].isWrapper === false && adBreaks[currentAdBreak].vastAdData !== undefined) {
@@ -807,7 +818,7 @@
           videojs.log('[ad-scheduler] Switch off time update handle.');
         }
         player.off('timeupdate', timeUpdateHandle);
-        player.trigger('onCompletion');
+        // player.trigger('onCompletion');
       } else {
         if (settings.debug) {
           videojs.log('[ad-scheduler] Yield completion after postroll handle.');
@@ -820,6 +831,7 @@
     // Hook time objects to determine if one of adbreak reached.
     player.on('contentupdate', contentUpdateHandle);
     player.on('readyforpreroll', prerollHandle);
+    player.on('contentplayback', timeUpdateHandle);
 
     // replace initializer to adscheduler namespace.
     player.ottAdScheduler = {

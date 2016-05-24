@@ -64,7 +64,7 @@
   <!-- js extensions out of bower auto management -->
 
   <!-- build:js({.tmp,src}) scripts/scripts.js -->
-  <!-- <script src="src/ott-ad-scheduler.js"></script> -->
+  <script src="src/ott-ad-scheduler.js"></script>
   <script src="src/ott-player-library.js"></script>
   <!-- endbuild -->
   <script>
@@ -78,16 +78,16 @@
       plugins: {
         ottPlayerLibrary: {
           debug: true
-        }
+        },
         // ads: {
         //   debug: true
         // },
-        // ottAdScheduler: {
-        //   debug: true,
-        //   requestUrl: 'test/PlayerTestVMAP.xml',
-        //   skipTime: 5,
-        //   allowSkip: true
-        // }
+        ottAdScheduler: {
+          debug: true,
+          requestUrl: 'test/PlayerTestVMAP.xml',
+          skipTime: 1,
+          allowSkip: true
+        }
         // hls: {
         //   withCredentials: true
         // }
@@ -98,7 +98,7 @@
       var mplayer = this;
       var tech = mplayer.tech({ IWillNotUseThisInPlugins: true });
       tech.on('loadstart', function(event) {
-          console.log("loadstart");
+          // console.log("loadstart");
           if(tech.hls != undefined) {
             tech.hls.xhr.beforeRequest = function(options) {
               // Only apply CROS cookie for key request, not for content
@@ -111,8 +111,8 @@
             };
           }
       });
-      mplayer.src([{src:'http://solutions.brightcove.com/jwhisenant/hls/apple/bipbop/bipbopall.m3u8', type:'application/x-mpegURL'}]);
-      // mplayer.play();
+      mplayer.src([{src:'http://vjs.zencdn.net/v/oceans.mp4', type:'video/mp4'}]);
+      mplayer.play();
     });
   </script>
 </body>
