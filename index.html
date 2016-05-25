@@ -2,14 +2,14 @@
 <html lang="en-us">
   <head>
     <meta charset="UTF-8">
-    <title>Ott-ad-scheduler by stevennick</title>
+    <title>videojs-ad-scheduler by stevennick</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
     <link href="http://vjs.zencdn.net/5.10.2/video-js.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="static/videojs.ds.css">
+    <link rel="stylesheet" type="text/css" href="static/Video.js.ds.css">
     <link rel="stylesheet" type="text/css" href="static/ast-button.css">
     <style type="text/css">
   	.vjs-default-skin {
@@ -17,11 +17,11 @@
   	}
     </style>
     <!-- If you'd like to support IE8 -->
-    <script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
+    <script src="http://vjs.zencdn.net/ie8/1.1.2/Video.js-ie8.min.js"></script>
   </head>
   <body>
     <section class="page-header">
-      <h1 class="project-name">Ott-ad-scheduler</h1>
+      <h1 class="project-name">videojs-ad-scheduler</h1>
       <h2 class="project-tagline">Advertisement scheduler for video.js</h2>
       <p class="project-tagline" style="text-align:center;">
       <video id="video"
@@ -31,17 +31,17 @@
 	           controls>
 	  </video>
       </p>
-      <a href="https://github.com/stevennick/ott-ad-scheduler" class="btn">View on GitHub</a>
-      <a href="https://github.com/stevennick/ott-ad-scheduler/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/stevennick/ott-ad-scheduler/tarball/master" class="btn">Download .tar.gz</a>
+      <a href="https://github.com/stevennick/videojs-ad-scheduler" class="btn">View on GitHub</a>
+      <a href="https://github.com/stevennick/videojs-ad-scheduler/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/stevennick/videojs-ad-scheduler/tarball/master" class="btn">Download .tar.gz</a>
     </section>
 
     <section class="main-content">
       <h1>
-<a id="ott-ad-scheduler" class="anchor" href="#ott-ad-scheduler" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ott Ad Scheduler</h1>
+<a id="videojs-ad-scheduler" class="anchor" href="#videojs-ad-scheduler" aria-hidden="true"><span class="octicon octicon-link"></span></a>Video.js Advertisement Scheduler</h1>
 
-<p>A linear advertisement schedule plugin for <a href="http://videojs.com">VideoJS 4.x and 5.x</a>.
-With ad scheduler, the VideoJS player can accept VMAP v1.0.1 schedule document while content playing, enables player to play preroll, midroll, and postroll inline advertisements.</p>
+<p>A linear advertisement schedule plugin for <a href="http://Video.js.com">Video.js 4.x and 5.x</a>.
+With ad scheduler, the Video.js player can accept VMAP v1.0.1 schedule document while content playing, enables player to play preroll, midroll, and postroll inline advertisements.</p>
 
 <blockquote>
 <p>Since this project is still under development, functions will change frequencies without notice.</p>
@@ -50,32 +50,37 @@ With ad scheduler, the VideoJS player can accept VMAP v1.0.1 schedule document w
 <h2>
 <a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting Started</h2>
 
-<p>Before use plugin works with exist VideoJS enabled page, you'll need external VAST&amp;VMAP parser for advertisement document information extraction. Here recommended to use <a href="https://github.com/dailymotion/vast-client-js">vast-client-js</a> from Dailymotion, and <a href="https://github.com/stevennick/vmap-client-js">vmap-client-js</a> created by me.
+<p>Before use plugin works with exist Video.js enabled page, you'll need external VAST&amp;VMAP parser for advertisement document information extraction. Here recommended to use <a href="https://github.com/dailymotion/vast-client-js">vast-client-js</a> from Dailymotion, and <a href="https://github.com/stevennick/vmap-client-js">vmap-client-js</a> created by me.
 This plugin also requires <a href="https://github.com/videojs/videojs-contrib-ads">videojs-contrib-ads</a> plugin has installed.</p>
 
 <p>Once you've added the plugin script to your page, you can use it with any video:</p>
 
 <div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>video.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
-&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>videojs.ads.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
-&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>ott-ad-scheduler.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
+&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>vast-client.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
+&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>vmap-client.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
+&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>Video.js.ads.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
+&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>videojs-ad-scheduler.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
 <span class="pl-s1">&lt;<span class="pl-ent">script</span>&gt;</span>
 <span class="pl-s1">  <span class="pl-k">var</span> options <span class="pl-k">=</span> {</span>
 <span class="pl-s1">    plugins<span class="pl-k">:</span> {</span>
+<span class="pl-s1">      <span class="pl-c">// You don't need to manually enable ads plugin, </span></span>
+<span class="pl-s1">      <span class="pl-c">// the ad scheduler will do the same work for you.</span></span>
 <span class="pl-s1">      ottAdScheduler<span class="pl-k">:</span> {</span>
 <span class="pl-s1">        serverUrl<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>(Your VMAP advertisement access URL)<span class="pl-pds">'</span></span>  <span class="pl-c">// One of the usage</span></span>
 <span class="pl-s1">      }</span>
 <span class="pl-s1">    }</span>
 <span class="pl-s1">  };</span>
-<span class="pl-s1">  videojs(<span class="pl-c1">document</span>.querySelector(<span class="pl-s"><span class="pl-pds">'</span>video<span class="pl-pds">'</span></span>), options, <span class="pl-c1">null</span>).ready(<span class="pl-k">function</span>() {</span>
-<span class="pl-s1">    <span class="pl-v">this</span>.src([{src<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">"</span>(Your main video content)<span class="pl-pds">"</span></span>, type<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">"</span>video/mp4<span class="pl-pds">"</span></span>}]); <span class="pl-c">// don't forget to assign correct video MIME type</span></span>
-<span class="pl-s1">    <span class="pl-v">this</span>.ottAdScheduler.requestUrl(<span class="pl-s"><span class="pl-pds">'</span>test/PlayerTestVMAP.xml<span class="pl-pds">'</span></span>); <span class="pl-c">// Another usage to load VMAP document.</span></span>
+<span class="pl-s1">  Video.js(<span class="pl-c1">document</span>.querySelector(<span class="pl-s"><span class="pl-pds">'</span>video<span class="pl-pds">'</span></span>), options, <span class="pl-c1">null</span>).ready(<span class="pl-k">function</span>() {</span>
+<span class="pl-s1">    <span class="pl-v">this</span>.src([{src<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">"</span>(Your main video content)<span class="pl-pds">"</span></span>, type<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">"</span>video/mp4<span class="pl-pds">"</span></span>}]);</span>
+<span class="pl-s1">    <span class="pl-c">// Another usage to load VMAP document.</span></span>
+<span class="pl-s1">    <span class="pl-v">this</span>.ottAdScheduler.requestUrl(<span class="pl-s"><span class="pl-pds">'</span>(Your VMAP advertisement access URL)<span class="pl-pds">'</span></span>); </span>
 <span class="pl-s1">    <span class="pl-v">this</span>.play();</span>
 <span class="pl-s1">  });</span>
 <span class="pl-s1">&lt;/<span class="pl-ent">script</span>&gt;</span></pre></div>
 
-<p>You can also use regular video.js src function to assign media content. Once video played, VideoJS will schedule ad breaks and play ads described in VMAP/VAST documents.</p>
+<p>You can also use regular video.js src function to assign media content. Once video played, Video.js will schedule ad breaks and play ads described in VMAP/VAST documents.</p>
 
-<p>Please see the <a href="https://github.com/stevennick/ott-ad-scheduler/blob/master/example.html">working example</a> of the plugin you can check out if you're having trouble.</p>
+<p>Please see the <a href="https://github.com/stevennick/videojs-ad-scheduler/blob/master/example.html">working example</a> of the plugin you can check out if you're having trouble.</p>
 
 <h2>
 <a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Documentation</h2>
@@ -150,7 +155,7 @@ Default: false</p>
 <a id="steps" class="anchor" href="#steps" aria-hidden="true"><span class="octicon octicon-link"></span></a>Steps</h3>
 
 <ol>
-<li>checkout project or <a href="https://github.com/stevennick/ott-ad-scheduler/zipball/master">download zip file</a>.</li>
+<li>checkout project or <a href="https://github.com/stevennick/videojs-ad-scheduler/zipball/master">download zip file</a>.</li>
 <li>cd into extracted folder.</li>
 <li>Setup environment:
 <code>npm install &amp;&amp; bower install</code>
@@ -170,7 +175,7 @@ Default: false</p>
 <a id="release-history" class="anchor" href="#release-history" aria-hidden="true"><span class="octicon octicon-link"></span></a>Release History</h2>
 
 <ul>
-<li>0.1.0: Upgrade library to VideoJS v5.10.x and videojs-contrib-ads plugin v3.2.0 compatible.</li>
+<li>0.1.0: Upgrade library to Video.js v5.10.x and Video.js-contrib-ads plugin v3.2.0 compatible.</li>
 <li>0.0.2: Compassed version; remove jQuery, bootstrap, and external skin dependencies.</li>
 <li>0.0.1: Initial release.</li>
 </ul>
@@ -181,7 +186,7 @@ Default: false</p>
 <p>Stevennick Ciou</p>
 
       <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/stevennick/ott-ad-scheduler">Ott-ad-scheduler</a> is maintained by <a href="https://github.com/stevennick">stevennick</a>.</span>
+        <span class="site-footer-owner"><a href="https://github.com/stevennick/videojs-ad-scheduler">videojs-ad-scheduler</a> is maintained by <a href="https://github.com/stevennick">stevennick</a>.</span>
 
         <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
@@ -189,7 +194,7 @@ Default: false</p>
     </section>
 
   <script src="http://vjs.zencdn.net/5.10.2/video.js"></script>
-  <script type="text/javascript" src="static/videojs.ds.js"></script>
+  <script type="text/javascript" src="static/Video.js.ds.js"></script>
   <script type="text/javascript" src="static/ast-client.js"></script>
   <script type="text/javascript" src="static/map-client.js"></script>
   <script type="text/javascript" src="static/ott-scheduler.js"></script>
@@ -205,7 +210,7 @@ Default: false</p>
         }
       }
     };
-    var player = videojs('video', options).ready(function() {
+    var player = Video.js('video', options).ready(function() {
       var mplayer = this;
       // trigger contentupdate event
       mplayer.src([{src:'http://vjs.zencdn.net/v/oceans.mp4', type:'video/mp4'}]);
