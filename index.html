@@ -40,7 +40,7 @@
       <h1>
 <a id="ott-ad-scheduler" class="anchor" href="#ott-ad-scheduler" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ott Ad Scheduler</h1>
 
-<p>A advertisement schedule plugin for <a href="http://videojs.com">VideoJS</a>.
+<p>A linear advertisement schedule plugin for <a href="http://videojs.com">VideoJS 4.x and 5.x</a>.
 With ad scheduler, the VideoJS player can accept VMAP v1.0.1 schedule document while content playing, enables player to play preroll, midroll, and postroll inline advertisements.</p>
 
 <blockquote>
@@ -61,14 +61,13 @@ This plugin also require <a href="https://github.com/videojs/videojs-contrib-ads
 <span class="pl-s1">&lt;<span class="pl-ent">script</span>&gt;</span>
 <span class="pl-s1">  <span class="pl-k">var</span> options <span class="pl-k">=</span> {</span>
 <span class="pl-s1">    plugins<span class="pl-k">:</span> {</span>
-<span class="pl-s1">      ads<span class="pl-k">:</span> {}, <span class="pl-c">// For videojs-contrib-ads plugin required.</span></span>
 <span class="pl-s1">      ottAdScheduler<span class="pl-k">:</span> {</span>
-<span class="pl-s1">        serverUrl<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>test/PlayerTestVMAP.xml<span class="pl-pds">'</span></span>  <span class="pl-c">// One of the usage</span></span>
+<span class="pl-s1">        serverUrl<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>(Your VMAP advertisement access URL)<span class="pl-pds">'</span></span>  <span class="pl-c">// One of the usage</span></span>
 <span class="pl-s1">      }</span>
 <span class="pl-s1">    }</span>
 <span class="pl-s1">  };</span>
 <span class="pl-s1">  videojs(<span class="pl-c1">document</span>.querySelector(<span class="pl-s"><span class="pl-pds">'</span>video<span class="pl-pds">'</span></span>), options, <span class="pl-c1">null</span>).ready(<span class="pl-k">function</span>() {</span>
-<span class="pl-s1">    <span class="pl-v">this</span>.src([{src<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">"</span>http://vjs.zencdn.net/v/oceans.mp4<span class="pl-pds">"</span></span>, type<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">"</span>video/mp4<span class="pl-pds">"</span></span>}]); <span class="pl-c">// don't forget to assign correct video MIME type</span></span>
+<span class="pl-s1">    <span class="pl-v">this</span>.src([{src<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">"</span>(Your main video content)<span class="pl-pds">"</span></span>, type<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">"</span>video/mp4<span class="pl-pds">"</span></span>}]); <span class="pl-c">// don't forget to assign correct video MIME type</span></span>
 <span class="pl-s1">    <span class="pl-v">this</span>.ottAdScheduler.requestUrl(<span class="pl-s"><span class="pl-pds">'</span>test/PlayerTestVMAP.xml<span class="pl-pds">'</span></span>); <span class="pl-c">// Another usage to load VMAP document.</span></span>
 <span class="pl-s1">    <span class="pl-v">this</span>.play();</span>
 <span class="pl-s1">  });</span>
@@ -171,6 +170,7 @@ Default: false</p>
 <a id="release-history" class="anchor" href="#release-history" aria-hidden="true"><span class="octicon octicon-link"></span></a>Release History</h2>
 
 <ul>
+<li>0.1.0: Upgrade library to VideoJS v5.10.x and videojs-contrib-ads plugin v3.2.0 compatible.</li>
 <li>0.0.2: Compassed version; remove jQuery, bootstrap, and external skin dependencies.</li>
 <li>0.0.1: Initial release.</li>
 </ul>
