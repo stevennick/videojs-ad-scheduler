@@ -1,17 +1,18 @@
 {
-  "name": "ott-ad-scheduler",
+  "name": "videojs-ad-scheduler",
   "version": "0.0.0",
   "author": "Stevennick Ciou",
-  "description": "A ad schedule plugin for video.js",
-  "license": "MIT",
+  "description": "Advertisement scheduler for video.js",
+  "license": "SEE LICENSE IN <LICENSE>",
   "keywords": [
     "videojs",
     "html5",
-    "flash",
+    "vmap",
+    "vast",
     "video",
     "player"
   ],
-  "repository": "stevennick/ott-ad-scheduler",
+  "repository": "stevennick/videojs-ad-scheduler",
   "dependencies": {},
   "devDependencies": {
     "grunt-contrib-clean": "^0.4",

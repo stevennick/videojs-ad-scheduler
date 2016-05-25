@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Ott Ad Scheduler</title>
+  <title>Videojs Ad Scheduler</title>
   <!-- build:css(.) styles/vendor.css -->
   <!-- bower:css -->
   <link rel="stylesheet" href="bower_components/video.js/dist/video-js.css" />
@@ -36,7 +36,7 @@
 <body>
   <div class="info">
     <p>
-      You can see the Ott Ad Scheduler plugin in action below.
+      You can see the Video.js Ad Scheduler plugin in action below.
       Look at the source of this page to see how to use it with your videos.
     </p>
   </div>
@@ -64,53 +64,23 @@
   <!-- js extensions out of bower auto management -->
 
   <!-- build:js({.tmp,src}) scripts/scripts.js -->
-  <script src="src/ott-ad-scheduler.js"></script>
-  <script src="src/ott-player-library.js"></script>
+  <script src="src/videojs-ad-scheduler.js"></script>
   <!-- endbuild -->
   <script>
     var options = {
       debug: true,
-      html5: {
-        hls: {
-          withCredentials: false
-        }
-      },
       plugins: {
-        ottPlayerLibrary: {
-          debug: true
-        },
-        // ads: {
-        //   debug: true
-        // },
         ottAdScheduler: {
           debug: true,
           requestUrl: 'test/PlayerTestVMAP.xml',
           skipTime: 1,
           allowSkip: true
         }
-        // hls: {
-        //   withCredentials: true
-        // }
       }
     };
 
     var player = videojs('video', options).ready(function() {
       var mplayer = this;
-      var tech = mplayer.tech({ IWillNotUseThisInPlugins: true });
-      tech.on('loadstart', function(event) {
-          // console.log("loadstart");
-          if(tech.hls != undefined) {
-            tech.hls.xhr.beforeRequest = function(options) {
-              // Only apply CROS cookie for key request, not for content
-              if (options.uri.match(/(\.ts|\.m3u8)$/gi) === null) {
-                options.withCredentials = true;
-              } else {
-                options.withCredentials = false;
-              }
-              return options;
-            };
-          }
-      });
       mplayer.src([{src:'http://vjs.zencdn.net/v/oceans.mp4', type:'video/mp4'}]);
       mplayer.play();
     });

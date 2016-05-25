@@ -1,6 +1,6 @@
 {
-  "name": "ott-ad-scheduler",
-  "version": "0.0.1",
+  "name": "videojs-ad-scheduler",
+  "version": "0.1.0",
   "dependencies": {
 
     "video.js": "videojs#~5.10.2",
@@ -12,5 +12,5 @@
   },
   "devDependencies": {},
   "appPath": "dist",
-  "moduleName": "ott-ad-scheduler"
+  "moduleName": "videojs-ad-scheduler"
 }
