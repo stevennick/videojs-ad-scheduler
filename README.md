@@ -106,8 +106,8 @@ This plugin added options as same name methods, let the user be able to change o
 
 ## Release History
  - 0.1.0: Upgrade library to Video.js v5.10.x and Video.js-contrib-ads plugin v3.2.0 compatible.
- -0.0.2: Compassed version; remove jQuery, bootstrap, and external skin dependencies.
- -0.0.1: Initial release.
+ - 0.0.2: Compassed version; remove jQuery, bootstrap, and external skin dependencies.
+ - 0.0.1: Initial release.
 
 ## Author
 Stevennick Ciou
