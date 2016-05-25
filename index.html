@@ -210,7 +210,7 @@ Default: false</p>
         }
       }
     };
-    var player = Video.js('video', options).ready(function() {
+    var player = videojs('video', options).ready(function() {
       var mplayer = this;
       // trigger contentupdate event
       mplayer.src([{src:'http://vjs.zencdn.net/v/oceans.mp4', type:'video/mp4'}]);
