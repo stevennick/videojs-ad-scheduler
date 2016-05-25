@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<VAST xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vast.xsd"
+    xmlns:psns="http://microsoft.com/namespace/playersequencer/iabExtensions.xsd"
+    version="2.0">
+<Ad id="1235" sequence="2">
+<InLine>
+<AdSystem>GDFP</AdSystem>
+<AdTitle>Pod video 2</AdTitle>
+<Description>video ad</Description>
+<Error><![CDATA[/example.html?ad/error/?label=videoplayfailed]]></Error>
+<Impression><![CDATA[/example.html?ad/view]]></Impression>
+<Creatives>
+    <Creative>
+        <Linear skipoffset="00:00:01">
+            <Duration>00:00:30</Duration>
+            <TrackingEvents>
+                <Tracking event="start"><![CDATA[/example.html?ad/tracking/?label=part2viewed]]></Tracking>
+                <Tracking event="firstQuartile"><![CDATA[/example.html?ad/tracking/?label=videoplaytime25]]></Tracking>
+                <Tracking event="midpoint"><![CDATA[/example.html?ad/tracking/?label=videoplaytime50]]></Tracking>
+                <Tracking event="thirdQuartile"><![CDATA[/example.html?ad/tracking/?label=videoplaytime75]]></Tracking>
+                <Tracking event="complete"><![CDATA[/example.html?ad/tracking/?label=videoplaytime100]]></Tracking>
+                <Tracking event="mute"><![CDATA[/example.html?ad/tracking/?label=admute]]></Tracking>
+                <Tracking event="unmute"><![CDATA[/example.html?ad/tracking/?label=adunmute]]></Tracking>
+                <Tracking event="rewind"><![CDATA[/example.html?ad/tracking/?label=adrewind]]></Tracking>
+                <Tracking event="pause"><![CDATA[/example.html?ad/tracking/?label=adpause]]></Tracking>
+                <Tracking event="resume"><![CDATA[/example.html?ad/tracking/?label=adresume]]></Tracking>
+                <Tracking event="fullscreen"><![CDATA[/example.html?ad/tracking/?label=adfullscreen]]></Tracking>
+                <Tracking event="acceptInvitation"><![CDATA[/example.html?ad/tracking/?label=acceptinvitation]]></Tracking>
+                <Tracking event="creativeView"><![CDATA[/example.html?ad/tracking/?label=vast_creativeview]]></Tracking>
+				<Tracking event="skip"><![CDATA[/example.html?ad/tracking/?label=skip]]></Tracking>
+            </TrackingEvents>
+            <VideoClicks>
+                <ClickThrough id="GDFP"><![CDATA[/example.html?ad/clicks/?adurl=http://www.microsoft.com]]></ClickThrough>
+				<ClickTracking id="GDFP"><![CDATA[/example.html?ad/tracking/?label=adclick]]></ClickTracking>
+            </VideoClicks>
+            <MediaFiles>
+                <MediaFile id="GDFP" delivery="progressive" bitrate="1230" width="852" height="480" type="video/webm" scalable="true" maintainAspectRatio="true">
+                    <![CDATA[http://htmlsamples.blob.core.windows.net/video/Windows_8_You_and_Me_Together.webm]]>
+                </MediaFile>
+                <MediaFile id="GDFP" delivery="progressive" bitrate="1230" width="852" height="480" type="video/mp4" scalable="true" maintainAspectRatio="true">
+                    <![CDATA[http://htmlsamples.blob.core.windows.net/video/Windows_8_You_and_Me_Together_852x480.mp4]]>
+                </MediaFile>
+            </MediaFiles>
+        </Linear>
+    </Creative>
+</Creatives>
+<Extensions>
+    <Extension type="geo">
+        <Bandwidth>4</Bandwidth>
+    </Extension>
+</Extensions>
+</InLine>
+</Ad>
+
+<Ad id="1234" sequence="1">
+<InLine>
+<AdSystem>GDFP</AdSystem>
+<AdTitle>Pod video 1</AdTitle>
+<Description>video ad</Description>
+<Error><![CDATA[/example.html?ad/error/?label=videoplayfailed]]></Error>
+<Impression><![CDATA[/example.html?ad/view]]></Impression>
+<Creatives>
+    <Creative>
+        <Linear>
+            <Duration>00:00:30</Duration>
+            <TrackingEvents>
+                <Tracking event="start"><![CDATA[/example.html?ad/tracking/?label=part2viewed]]></Tracking>
+                <Tracking event="firstQuartile"><![CDATA[/example.html?ad/tracking/?label=videoplaytime25]]></Tracking>
+                <Tracking event="midpoint"><![CDATA[/example.html?ad/tracking/?label=videoplaytime50]]></Tracking>
+                <Tracking event="thirdQuartile"><![CDATA[/example.html?ad/tracking/?label=videoplaytime75]]></Tracking>
+                <Tracking event="complete"><![CDATA[/example.html?ad/tracking/?label=videoplaytime100]]></Tracking>
+                <Tracking event="mute"><![CDATA[/example.html?ad/tracking/?label=admute]]></Tracking>
+                <Tracking event="unmute"><![CDATA[/example.html?ad/tracking/?label=adunmute]]></Tracking>
+                <Tracking event="rewind"><![CDATA[/example.html?ad/tracking/?label=adrewind]]></Tracking>
+                <Tracking event="pause"><![CDATA[/example.html?ad/tracking/?label=adpause]]></Tracking>
+                <Tracking event="resume"><![CDATA[/example.html?ad/tracking/?label=adresume]]></Tracking>
+                <Tracking event="fullscreen"><![CDATA[/example.html?ad/tracking/?label=adfullscreen]]></Tracking>
+                <Tracking event="acceptInvitation"><![CDATA[/example.html?ad/tracking/?label=acceptinvitation]]></Tracking>
+                <Tracking event="creativeView"><![CDATA[/example.html?ad/tracking/?label=vast_creativeview]]></Tracking>
+            </TrackingEvents>
+            <VideoClicks>
+                <ClickThrough id="GDFP"><![CDATA[/example.html?ad/clicks/?adurl=http://www.microsoft.com]]></ClickThrough>
+            </VideoClicks>
+            <MediaFiles>
+                <MediaFile id="GDFP" delivery="progressive" bitrate="1230" width="852" height="480" type="video/webm" scalable="true" maintainAspectRatio="true">
+                    <![CDATA[http://htmlsamples.blob.core.windows.net/video/Windows_8_Cliffjumpers.webm]]>
+                </MediaFile>
+                <MediaFile id="GDFP" delivery="progressive" bitrate="1230" width="852" height="480" type="video/mp4" scalable="true" maintainAspectRatio="true">
+                    <![CDATA[http://htmlsamples.blob.core.windows.net/video/Windows_8_Cliffjumpers_852x480.mp4]]>
+                </MediaFile>
+            </MediaFiles>
+        </Linear>
+    </Creative>
+</Creatives>
+<Extensions>
+    <Extension type="geo">
+        <Bandwidth>4</Bandwidth>
+    </Extension>
+</Extensions>
+</InLine>
+</Ad>
+</VAST>

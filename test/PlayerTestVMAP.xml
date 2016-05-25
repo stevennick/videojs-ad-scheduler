@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<VMAP xmlns:vmap="http://www.iab.net/vmap-1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vast.xsd"
+    xmlns:psns="http://microsoft.com/namespace/playersequencer/iabExtensions.xsd"
+    version="1.0">
+<vmap:AdBreak breakType="linear" breakId="mypre" timeOffset="00:00:11">
+    <vmap:AdSource allowMultipleAds="true" followRedirects="true" id="1">
+        <vmap:VASTData>
+            <VAST xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="vast.xsd"
+                version="2.0">
+                <Ad id="1">
+                    <InLine>
+                        <AdSystem>GDFP</AdSystem>
+                        <AdTitle>video</AdTitle>
+                        <Description>video ad</Description>
+                        <Error><![CDATA[/example.html?ad/error/?label=videoplayfailed]]></Error>
+                        <Impression><![CDATA[/example.html?ad/view]]></Impression>
+                        <Creatives>
+                            <Creative>
+                                <Linear>
+                                    <Duration>00:00:30</Duration>
+                                    <MediaFiles>
+                                        <MediaFile id="GDFP" delivery="progressive" bitrate="1230" width="852" height="480" type="video/webm" scalable="true" maintainAspectRatio="true">
+                                            <![CDATA[http://htmlsamples.blob.core.windows.net/video/Windows_8_You_and_Me_Together.webm]]>
+                                        </MediaFile>
+                                        <MediaFile id="GDFP" delivery="progressive" bitrate="1230" width="852" height="480" type="video/mp4" scalable="true" maintainAspectRatio="true">
+                                            <![CDATA[http://htmlsamples.blob.core.windows.net/video/Windows_8_You_and_Me_Together_852x480.mp4]]>
+                                        </MediaFile>
+                                    </MediaFiles>
+                                </Linear>
+                            </Creative>
+                        </Creatives>
+                    </InLine>
+                </Ad>
+            </VAST>
+        </vmap:VASTData>
+    </vmap:AdSource>
+</vmap:AdBreak>
+
+<vmap:AdBreak breakType="linear" breakId="mymidpod" timeOffset="start">
+    <vmap:AdSource allowMultipleAds="true" followRedirects="true" id="2">
+        <vmap:AdTagURI templateType="vast3">
+            <![CDATA[./test/PlayerTestVASTPod.xml]]>
+        </vmap:AdTagURI>
+    </vmap:AdSource>
+    <vmap:TrackingEvents>
+        <vmap:Tracking event="breakStart">
+            <![CDATA[/example.html?ad/tracking/?label=breakStart]]>
+        </vmap:Tracking>
+        <vmap:Tracking event="breakEnd">
+            <![CDATA[/example.html?ad/tracking/?label=breakEnd]]>
+        </vmap:Tracking>
+        <vmap:Tracking event="error">
+            <![CDATA[/example.html?ad/tracking/?label=error]]>
+        </vmap:Tracking>
+    </vmap:TrackingEvents>
+</vmap:AdBreak>
+
+<vmap:AdBreak breakType="linear" breakId="mymid2" timeOffset="00:00:41.2">
+    <vmap:AdSource allowMultipleAds="true" followRedirects="true" id="3">
+        <vmap:AdTagURI templateType="vast3">
+            <![CDATA[./test/PlayerTestVAST.xml]]>
+        </vmap:AdTagURI>
+    </vmap:AdSource>
+    <vmap:Extensions>
+        <vmap:Extension type="application/xml"><psns:PlayPolicy deleteAfterPlayed="true"/></vmap:Extension>
+    </vmap:Extensions>
+</vmap:AdBreak>
+
+<vmap:AdBreak breakType="linear" breakId="mypost" timeOffset="end">
+    <vmap:AdSource allowMultipleAds="true" followRedirects="true" id="4">
+        <vmap:VASTData>
+            <VAST xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="vast.xsd"
+                version="2.0">
+                <Ad id="1">
+                    <InLine>
+                        <AdSystem>GDFP</AdSystem>
+                        <AdTitle>video</AdTitle>
+                        <Description>video ad</Description>
+                        <Error><![CDATA[/example.html?ad/error/?label=videoplayfailed]]></Error>
+                        <Impression><![CDATA[/example.html?ad/view]]></Impression>
+                        <Creatives>
+                            <Creative>
+                                <Linear>
+                                    <Duration>00:00:30</Duration>
+                                    <MediaFiles>
+                                        <MediaFile id="GDFP" delivery="progressive" bitrate="1230" width="852" height="480" type="video/webm" scalable="true" maintainAspectRatio="true" psns:mediaTimeOffset="17">
+                                            <![CDATA[http://htmlsamples.blob.core.windows.net/video/Windows_8_Cliffjumpers.webm]]>
+                                        </MediaFile>
+                                        <MediaFile id="GDFP" delivery="progressive" bitrate="1230" width="852" height="480" type="video/mp4" scalable="true" maintainAspectRatio="true" psns:mediaTimeOffset="17">
+                                            <![CDATA[http://htmlsamples.blob.core.windows.net/video/Windows_8_Cliffjumpers_852x480.mp4]]>
+                                        </MediaFile>
+                                    </MediaFiles>
+                                </Linear>
+                            </Creative>
+                        </Creatives>
+                    </InLine>
+                </Ad>
+            </VAST>
+        </vmap:VASTData>
+    </vmap:AdSource>
+</vmap:AdBreak>
+
+</VMAP>
