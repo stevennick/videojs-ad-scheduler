@@ -4,20 +4,22 @@
 (function(window, videojs) {
   'use strict';
 
+  var iOS = /iPad|iPhone|iPod/.test(navigator.platform);
+
   var defaults = {
-    // serverUrl: '',
-    // userId: '',
-    // contentId: '',
-    requestUrl: '',
-    option: true,
-    // seconds before skip button shows, negative values to disable skip button altogether
-    skipTime: 5,
-    allowSkip: true,
-    startOffset: 0,
-    resumeSkipMidroll: false,
-    debug: false
-  },
-  ottAdScheduler;
+      // serverUrl: '',
+      // userId: '',
+      // contentId: '',
+      requestUrl: '',
+      option: true,
+      // seconds before skip button shows, negative values to disable skip button altogether
+      skipTime: 5,
+      allowSkip: true,
+      startOffset: 0,
+      resumeSkipMidroll: false,
+      debug: false
+    },
+    ottAdScheduler;
 
   /**
    * Initialize the plugin.
@@ -25,28 +27,28 @@
    */
   ottAdScheduler = function(options) {
 
-    var settings = videojs.util.mergeOptions(defaults, options);
+    var settings = videojs.mergeOptions(defaults, options);
     var player = this;
 
-    if(player.ads === undefined) {
-      videojs.log.error('ad-scheduler', 'This plugin requires videojs-contrib-ads, plugin not initialized');
+    if (player.ads === undefined) {
+      videojs.log.error('[ad-scheduler] This plugin requires videojs-contrib-ads, plugin not initialized');
       return null;
     } else {
       // Initialize ads framework
-      // player.ads();
+      player.ads({debug: settings.debug});
     }
 
     if (VMAP === undefined) {
-      videojs.log.error('ad-scheduler', 'This plugin requires vmap-client-js, plugin not initialized');
+      videojs.log.error('[ad-scheduler] This plugin requires vmap-client-js, plugin not initialized');
       return null;
     }
 
     if (DMVAST === undefined) {
-      videojs.log.error('ad-scheduler', 'This plugin requires vast-client-js, plugin not initialized');
+      videojs.log.error('[ad-scheduler] This plugin requires vast-client-js, plugin not initialized');
       return null;
     } else {
       if (DMVAST.client.parse === undefined) {
-        videojs.log.error('ad-scheduler', 'This plugin requires extra extensions managed by stevennick/vast-client-js, plugin not initialized');
+        videojs.log.error('[ad-scheduler] This plugin requires extra extensions managed by stevennick/vast-client-js, plugin not initialized');
         return null;
       }
     }
@@ -113,15 +115,15 @@
       } else if (time.search(/#\d+/) === 0 && contentLength !== undefined && adBreakSize !== undefined) {
         var position = parseInt(time.match(/\d+/)[0], 10);
         if (position === 0) {
-          videojs.log.error('ad-scheduler', 'Position can not be zero.');
+          videojs.log.error('[ad-scheduler] Position can not be zero.');
           return -100;
         } else if (position > adBreakSize) {
-          videojs.log.error('ad-scheduler', 'Position value is out of AdBreaks range.');
+          videojs.log.error('[ad-scheduler] Position value is out of AdBreaks range.');
           return -100;
         }
         value = ((position / adBreakSize) / 100) * contentLength;
       } else {
-        videojs.log.error('ad-scheduler', 'Error time format or not enough information to determine correct adbreak time.');
+        videojs.log.error('[ad-scheduler] Error time format or not enough information to determine correct adbreak time.');
         return -100;
       }
       return value;
@@ -137,30 +139,34 @@
      * @return {Object}     parsed result for futher uses.
      */
     function parseURL(url) {
-      var a =  document.createElement('a');
+      var a = document.createElement('a');
       a.href = url;
       return {
         source: url,
-        protocol: a.protocol.replace(':','').toLowerCase(),
+        protocol: a.protocol.replace(':', '').toLowerCase(),
         host: a.hostname,
         port: a.port,
         query: a.search,
-        params: (function(){
+        params: (function() {
           var ret = {},
-            seg = a.search.replace(/^\?/,'').split('&'),
-            len = seg.length, i = 0, s;
-          for (;i<len;i++) {
-            if (!seg[i]) { continue; }
+            seg = a.search.replace(/^\?/, '').split('&'),
+            len = seg.length,
+            i = 0,
+            s;
+          for (; i < len; i++) {
+            if (!seg[i]) {
+              continue;
+            }
             s = seg[i].split('=');
             ret[s[0]] = s[1];
           }
           return ret;
         })(),
-        file: (a.pathname.match(/\/([^/?#]+)$/i) || [,''])[1],
-        hash: a.hash.replace('#',''),
-        path: a.pathname.replace(/^([^/])/,'/$1'),
-        relative: (a.href.match(/tps?:\/\/[^/]+(.+)/) || [,''])[1],
-        segments: a.pathname.replace(/^\//,'').split('/')
+        file: (a.pathname.match(/\/([^/?#]+)$/i) || [, ''])[1],
+        hash: a.hash.replace('#', ''),
+        path: a.pathname.replace(/^([^/])/, '/$1'),
+        relative: (a.href.match(/tps?:\/\/[^/]+(.+)/) || [, ''])[1],
+        segments: a.pathname.replace(/^\//, '').split('/')
       };
     }
 
@@ -205,6 +211,52 @@
     };
 
     /**
+     * Force apply offset until player is doing playback action.
+     *
+     * Since mobile device player will omit setTime function until source is ready and player is playing,
+     * we use timeupdate event to ensure soruce is loaded and continue force seek until video is seek to desired time.
+     *
+     * @return {[type]} [description]
+     */
+    var forceOffset = function() {
+      if (player.currentTime() < settings.startOffset) {
+        player.currentTime(settings.startOffset);
+        if (settings.debug) {
+          videojs.log('[ad-scheduler] Force setup offset...');
+        }
+      }
+      if (player.currentTime() > settings.startOffset) {
+        player.off('timeupdate', forceOffset);
+        settings.startOffset = 0;
+        if (settings.debug) {
+          videojs.log('[ad-scheduler] Complete setup offset.');
+        }
+      }
+    };
+
+    /**
+     * Apply startOffset to player. Using together with forceOffset function.
+     *
+     * Note: for iOS device, we must apply 1 second delay awaiting player ready.
+     *
+     * @return {null}
+     */
+    var applyStartOffset = function() {
+      // Below hacks is apply for iOS devices.
+      player.one('play', function() {
+        if (iOS) {
+          setTimeout(function() {
+            player.on('timeupdate', forceOffset);
+          }, 1000);
+        } else {
+          player.on('timeupdate', forceOffset);
+        }
+      });
+      // Other devices, trying to setup current Time.
+      player.currentTime(settings.startOffset);
+    };
+
+    /**
      * Used to store adbreak object.
      * @param  {[type]} ads [description]
      * @return {[type]}     [description]
@@ -213,9 +265,9 @@
       if (ads === null || typeof ads === 'undefined' || typeof ads.adbreaks === 'undefined' || ads.adbreaks.length === 0) {
         // Run offset once when playback.
         if (settings.startOffset > 0) {
-          player.currentTime(settings.startOffset);
-          // settings.startOffset = 0;
+          applyStartOffset();
         }
+        player.trigger('adsready');
         return;
       }
       // parse all abreaks to determine if there has preroll AD
@@ -254,9 +306,13 @@
       sortedOffset.sort();
       if (__startIndex !== undefined) {
         sortedOffset.unshift(__startIndex);
+      } else {
+        player.trigger('nopreroll');
       }
       if (__endIndex !== undefined) {
         sortedOffset.push(__endIndex);
+      } else {
+        player.trigger('nopostroll');
       }
 
       // if (settings.debug) {
@@ -265,7 +321,7 @@
 
       // Rebuild adBreaks
       var sortedAdBreaks = [];
-      for (var sortId = 0 ; sortId < sortedOffset.length; sortId++) {
+      for (var sortId = 0; sortId < sortedOffset.length; sortId++) {
         var offset = sortedOffset[sortId];
         sortedAdBreaks.push(adBreaks[offset]);
         adBreaksTimeArray.push(adBreaks[offset].timeOffset);
@@ -274,26 +330,18 @@
       //   videojs.log('ad-scheduler', 'Original:' + JSON.stringify(adBreaks));
       // }
       adBreaks = sortedAdBreaks.slice();
-      // if (settings.debug) {
-      //   videojs.log('ad-scheduler', 'Ordered: ' + JSON.stringify(adBreaks));
-      // }
-      source = player.currentSrc();
-      if (settings.startOffset > 0) {
-        player.currentTime(settings.startOffset);
-        // settings.startOffset = 0;
+      if (settings.debug) {
+        videojs.log('ad-scheduler', 'Ordered: ' + JSON.stringify(adBreaks));
       }
+      source = player.currentSrc();
       player.on('timeupdate', timeUpdateHandle);
       player.off('ended', onCompletionHandle);
       player.one('ended', offTimeUpdateHandle);
 
-      if (adBreaksTimeArray[0] === 0) {
-        // player.one('start', function(event) {
-          player.trigger('adsready');
-        // });
-      } else {
-        //setup duration change event.
-        // player.one('durationchange', updateLastAdBreak);
+      if (settings.startOffset > 0 && !player.inAdMode) {
+        applyStartOffset();
       }
+      player.trigger('adsready');
     };
 
     var setNewContent = function(contentUpdate) {
@@ -301,7 +349,7 @@
       if (!player.inAdMode && settings.requestUrl !== undefined) {
         // Load AD URL
         // var requestUrl = settings.serverUrl + '?uid=' + encodeURIComponent(settings.userId) + "&cid=" + encodeURIComponent(settings.contentId);
-        player.on('ended', onCompletionHandle);
+        // player.on('ended', onCompletionHandle);
         var inst = VMAP.client.get(settings.requestUrl, null, vmapCallback);
       }
     };
@@ -332,34 +380,41 @@
 
       var adPlayList = [];
 
-      for(var vindex = 0; vindex < vast.ads.length; vindex++) {
+      for (var vindex = 0; vindex < vast.ads.length; vindex++) {
         var ad = vast.ads[vindex];
 
         for (var index = 0; index < ad.creatives.length; index++) {
           var creative = ad.creatives[index];
-          switch(creative.type) {
+          switch (creative.type) {
             case 'linear':
-            // Linear AD
-            // Select available player tech for playing
-            var adSource = [];
-            for (var typeIndex = 0; typeIndex < creative.mediaFiles.length; typeIndex++) {
-              var mediaFile = creative.mediaFiles[typeIndex];
-              adSource.push({type: mediaFile.mimeType, src: mediaFile.fileURL});
-              // TODO: Init tracker and attach events to player
-            }
-            // TODO: add external data (Tracker, etc...)
-            adPlayList.push({src: adSource, creative: creative, ad: ad});
+              // Linear AD
+              // Select available player tech for playing
+              var adSource = [];
+              for (var typeIndex = 0; typeIndex < creative.mediaFiles.length; typeIndex++) {
+                var mediaFile = creative.mediaFiles[typeIndex];
+                adSource.push({
+                  type: mediaFile.mimeType,
+                  src: mediaFile.fileURL
+                });
+                // TODO: Init tracker and attach events to player
+              }
+              // TODO: add external data (Tracker, etc...)
+              adPlayList.push({
+                src: adSource,
+                creative: creative,
+                ad: ad
+              });
 
-            break;
+              break;
             case 'non-linear':
-            // TODO
-            break;
+              // TODO
+              break;
             case 'companion':
-            // TODO
-            break;
+              // TODO
+              break;
             default:
-            // DO Nothing
-            break;
+              // DO Nothing
+              break;
           }
         }
       }
@@ -367,74 +422,79 @@
 
       // Log current states.
       var originsrc = player.currentSrc();
+      var origintype = player.currentType();
       var originPos = player.currentTime();
       if (currentAdBreak === 0 && settings.startOffset > 0) {
         originPos = settings.startOffset;
       }
-      var originType = player.currentType();
       // Set to start AD Mode;
       player.ads.startLinearAdMode();
 
       var adIndex = 0;
 
-      // var forcetoCurrentTime = function(event, originPos) {
-      //   if (player.currentTime() < originPos) {
-      //     player.currentTime(originPos);
-      //   } else {
-      //     player.off('timeupdate', forcetoCurrentTime);
-      //   }
-      // };
-
       var startPlayContent = function(event) {
 
-        player.inAdMode = false;
         player.ads.endLinearAdMode();
         if (adBreaks[currentAdBreak - 1].trackingEvent !== null) {
           adBreaks[currentAdBreak - 1].tracker.breakEnd();
         }
         //setup duration change event.
         // player.one('durationchange', updateLastAdBreak);
-        player.src([{src: originsrc, type: originType}]);
-        // seeking for same tech
-        player.currentTime(originPos);
+        // player.src([{
+        //   src: originsrc,
+        //   type: origintype
+        // }]);
+        // // seeking for same tech
+        // player.currentTime(originPos);
 
-        var forceToCurrentTime = function(event) {
-          if (player.currentTime() < originPos) {
-            player.currentTime(originPos);
-          } else {
-            player.off('timeupdate', forceToCurrentTime);
-            player.on('timeupdate', timeUpdateHandle);
-            player.one('ended', offTimeUpdateHandle);
-          }
-        };
+        // var forceToCurrentTime = function(event) {
+        //   if (player.currentTime() < originPos) {
+        //     player.currentTime(originPos);
+        //   }
+        //   if (player.currentTime() > originPos) {
+        //     player.off('timeupdate', forceToCurrentTime);
+        //     player.on('timeupdate', timeUpdateHandle);
+        //     player.one('ended', offTimeUpdateHandle);
+        //   }
+        // };
+        player.inAdMode = false;
 
         // Only execute auto play when playback is not end.
+        // if (adBreaksTimeArray[currentAdBreak - 1] !== -1) {
+        //   // execute player play.
+        //   player.play().ready(function() {
+        //     player.on('timeupdate', forceToCurrentTime);
+        //   });
+        // }
         if (adBreaksTimeArray[currentAdBreak - 1] !== -1) {
           // execute player play.
           player.play().ready(function() {
-            player.on('timeupdate', forceToCurrentTime);
+            player.on('timeupdate', timeUpdateHandle);
           });
+        } else {
+          player.currentTime(originPos);
+          player.off('timeupdate', timeUpdateHandle);
+          player.pause();
         }
-
-        // seeking for different tech (Hack). e.g., HLS (Flash backend) -> html5
-        // player.one('timeupdate', function(event) {
-        //   player.currentTime(originPos);
-        //   player.on('timeupdate', timeUpdateHandle);
-        //   player.one('ended', offTimeUpdateHandle);
-        // });
-
       };
 
       var nextOrEndAd = function(event) {
 
         adIndex++;
         player.trigger('vast-removed');
-        player.off('ended' , nextOrEndAd);
-        player.off('error', nextOrEndAd);
+        player.off('adended', nextOrEndAd);
+        player.off('aderror', nextOrEndAd);
         // player.trigger('adend');
 
-        player.ottAdScheduler.blocker.parentNode.removeChild(player.ottAdScheduler.blocker);
-        player.ottAdScheduler.skipButton.parentNode.removeChild(player.ottAdScheduler.skipButton);
+        if (player.ottAdScheduler.blocker.parentNode) {
+          player.ottAdScheduler.blocker.parentNode.removeChild(player.ottAdScheduler.blocker);
+          // player.ottAdScheduler.blocker = undefined;
+        }
+
+        if (player.ottAdScheduler.skipButton.parentNode) {
+          player.ottAdScheduler.skipButton.parentNode.removeChild(player.ottAdScheduler.skipButton);
+          // player.ottAdScheduler.skipButton = undefined;
+        }
 
         if (adIndex >= adPlayList.length) {
           // No present AD to play
@@ -452,7 +512,7 @@
           player.vastTracker.load();
         };
         var eventTimeUpdateHandle = function() {
-          if(isNaN(player.vastTracker.assetDuration)) {
+          if (isNaN(player.vastTracker.assetDuration)) {
             player.vastTracker.assetDuration = player.duration();
           }
           player.vastTracker.setProgress(player.currentTime());
@@ -464,21 +524,23 @@
           });
         };
         var eventErrHandle = function() {
-          DMVAST.util.track(player.vastTracker.ad.errorURLTemplates, {ERRORCODE: 405});
+          DMVAST.util.track(player.vastTracker.ad.errorURLTemplates, {
+            ERRORCODE: 405
+          });
           errorOccurred = true;
           player.trigger('ended');
         };
 
-        player.on('canplay', eventCanPlayHandle);
-        player.on('timeupdate', eventTimeUpdateHandle);
-        player.on('pause', eventPauseHandle);
-        player.on('error', eventErrHandle);
+        player.on('adcanplay', eventCanPlayHandle);
+        player.on('adtimeupdate', eventTimeUpdateHandle);
+        player.on('adpause', eventPauseHandle);
+        player.on('aderror', eventErrHandle);
 
         player.one('vast-removed', function() {
-          player.off('pause', eventPauseHandle);
-          player.off('canplay', eventCanPlayHandle);
-          player.off('timeupdate', eventTimeUpdateHandle);
-          player.off('error', eventErrHandle);
+          player.off('adpause', eventPauseHandle);
+          player.off('adcanplay', eventCanPlayHandle);
+          player.off('adtimeupdate', eventTimeUpdateHandle);
+          player.off('aderror', eventErrHandle);
           if (!errorOccurred) {
             player.vastTracker.complete();
           }
@@ -489,7 +551,7 @@
         player.off('ended', offTimeUpdateHandle);
         player.inAdMode = true;
         if (settings.debug) {
-          videojs.log('ad-scheduler', 'startPlayAd with src: ' + JSON.stringify(ado.src));
+          videojs.log('[ad-scheduler] startPlayAd with src: ' + JSON.stringify(ado.src));
         }
 
         player.src(ado.src);
@@ -498,8 +560,8 @@
           // player.trigger('vast-ready');
           setupEvents();
           if (settings.debug) {
-            // videojs.log('ad-scheduler', 'startPlayAd with tracker: ' + JSON.stringify(player.vastTracker.trackingEvents));
-            videojs.log('ad-scheduler', 'startPlayAd with tracker');
+            videojs.log('[ad-scheduler]', 'startPlayAd with tracker: ' + JSON.stringify(player.vastTracker.trackingEvents));
+            // videojs.log('[ad-scheduler] startPlayAd with tracker');
           }
         } else {
           player.trigger('adscanceled');
@@ -509,36 +571,37 @@
         var clickthrough;
         if (player.vastTracker.clickThroughURLTemplate) {
           clickthrough = DMVAST.util.resolveURLTemplates(
-            [player.vastTracker.clickThroughURLTemplate],
-            {
+            [player.vastTracker.clickThroughURLTemplate], {
               CACHEBUSTER: Math.round(Math.random() * 1.0e+10),
               CONTENTPLAYHEAD: player.vastTracker.progressFormated()
             }
           )[0];
         }
 
-        // click action and tracker handle
-        var blocker = window.document.createElement('a');
-        blocker.className = 'vast-blocker';
-        blocker.href = clickthrough || '#';
-        blocker.target = '_blank';
-        blocker.onclick = function() {
-          if (player.paused()) {
-            player.play();
-            return false;
-          }
-          var clicktrackers = player.vastTracker.clickTrackingURLTemplates;
-          if (clicktrackers) {
-            player.vastTracker.trackURLs(clicktrackers);
-          }
-          player.trigger('adclick');
-        };
-        player.ottAdScheduler.blocker = blocker;
-        player.el().insertBefore(blocker, player.controlBar.el());
-        // player.one('ended', function(){
-        //     player.ottAdScheduler.blocker.parentNode.removeChild(blocker);
-        // });
-        // end
+        if (clickthrough) {
+          // click action and tracker handle
+          var blocker = window.document.createElement('a');
+          blocker.className = 'vast-blocker';
+          blocker.href = clickthrough || '#';
+          blocker.target = '_blank';
+          blocker.onclick = function() {
+            if (player.paused()) {
+              player.play();
+              return false;
+            }
+            var clicktrackers = player.vastTracker.clickTrackingURLTemplates;
+            if (clicktrackers) {
+              player.vastTracker.trackURLs(clicktrackers);
+            }
+            player.trigger('adclick');
+          };
+          player.ottAdScheduler.blocker = blocker;
+          player.el().insertBefore(blocker, player.controlBar.el());
+          // player.one('ended', function(){
+          //     player.ottAdScheduler.blocker.parentNode.removeChild(blocker);
+          // });
+          // end
+        }
 
         // skippible ad
         var skipButton = window.document.createElement('div');
@@ -548,21 +611,26 @@
         }
         player.ottAdScheduler.skipButton = skipButton;
         skipButton.onclick = function(e) {
-          if((' ' + player.ottAdScheduler.skipButton.className + ' ').indexOf(' enabled ') >= 0) {
+          if ((' ' + player.ottAdScheduler.skipButton.className + ' ').indexOf(' enabled ') >= 0) {
+            // player.off('timeupdate', adTimeupdate);
             player.vastTracker.skip();
             player.pause();
-            player.trigger('ended');
+            if (settings.debug) {
+              videojs.log('[ad-scheduler] Ad has been skipped by user push skip button.');
+            }
+            player.trigger('adended');
+            // player.trigger('adscanceled');
           }
-          if(window.Event.prototype.stopPropagation !== undefined) {
-            e.stopPropagation();
-          } else {
-            return false;
-          }
+          // if (window.Event.prototype.stopPropagation !== undefined) {
+          //   e.stopPropagation();
+          // } else {
+          //   return false;
+          // }
         };
         var nodes = player.el().childNodes;
         var nodeIndex;
         var controlBar;
-        for(nodeIndex = 0; nodeIndex < nodes.length; nodeIndex ++) {
+        for (nodeIndex = 0; nodeIndex < nodes.length; nodeIndex++) {
           if (nodes[nodeIndex].getAttribute('class') !== 'vjs-control-bar') {
             continue;
           } else {
@@ -575,10 +643,10 @@
         var adTimeupdate = function(e) {
           var maxDelay = settings.skipTime > player.vastTracker.skipDelay ? settings.skipTime : player.vastTracker.skipDelay;
           var timeLeft = Math.ceil(maxDelay - player.currentTime());
-          if(timeLeft > 0) {
+          if (timeLeft > 0) {
             player.ottAdScheduler.skipButton.innerHTML = 'You can skip ad in ' + timeLeft + '...';
           } else {
-            if((' ' + player.ottAdScheduler.skipButton.className + ' ').indexOf(' enabled ') === -1){
+            if ((' ' + player.ottAdScheduler.skipButton.className + ' ').indexOf(' enabled ') === -1) {
               player.ottAdScheduler.skipButton.className += ' enabled';
               player.ottAdScheduler.skipButton.innerHTML = 'Skip this AD >>';
             }
@@ -586,19 +654,19 @@
         };
 
         if (player.vastTracker.skipDelay !== null) {
-          player.on('timeupdate', adTimeupdate);
+          player.on('adtimeupdate', adTimeupdate);
         }
 
         // end
 
         player.play();
         // player.trigger('adstart');
-        player.one('ended' , nextOrEndAd);
-        player.one('error', nextOrEndAd);
+        player.one('adended', nextOrEndAd);
+        player.one('aderror', nextOrEndAd);
       };
 
       if (settings.debug) {
-        videojs.log('ad-scheduler', 'Total ' + adPlayList.length + ' ads in this ad break.');
+        videojs.log('[ad-scheduler] Total ' + adPlayList.length + ' ads in this ad break.');
       }
 
       if (adPlayList.length === 0 && adBreaks[currentAdBreak - 1].trackingEvent !== null) {
@@ -624,11 +692,11 @@
       // TODO: add error handle
 
       // if (settings.debug) {
-      //   videojs.log('ad-scheduler', JSON.stringify(vast));
+      //   videojs.log('[ad-scheduler] JSON.stringify(vast));
       // }
       player.pause();
       if (settings.debug) {
-        videojs.log('ad-scheduler', 'Play Ad break #' + (currentAdBreak + 1));
+        videojs.log('[ad-scheduler] Play Ad break #' + (currentAdBreak + 1));
       }
       // BreakStart.
       if (adBreaks[currentAdBreak].trackingEvent !== null) {
@@ -645,10 +713,12 @@
      */
     var timeUpdateHandle = function(timeUpadteEvent) {
       // Skip if in ad mode or adbreaks is empty.
-      if (player.inAdMode === true || adBreaks === undefined || adBreaks[currentAdBreak] === undefined ) { return; }
+      if (player.inAdMode === true || adBreaks === undefined || adBreaks[currentAdBreak] === undefined) {
+        return;
+      }
 
       if (settings.debug) {
-        videojs.log('ad-scheduler', 'Main content: ' + player.currentTime() + ', next trigger: ' + adBreaks[currentAdBreak].timeOffset);
+        videojs.log('[ad-scheduler] Main content: ' + player.currentTime() + ', next trigger: ' + adBreaks[currentAdBreak].timeOffset);
       }
 
       // Run offset once when playback.
@@ -659,7 +729,7 @@
 
       if (adBreaks[currentAdBreak].timeOffset > 0 && player.currentTime() > adBreaks[currentAdBreak].timeOffset) {
         if (settings.debug) {
-          videojs.log('ad-scheduler', 'Main content trigger play Ad break #' + (currentAdBreak + 1));
+          videojs.log('[ad-scheduler] Main content trigger play Ad break #' + (currentAdBreak + 1));
         }
 
         player.off('timeupdate', timeUpdateHandle);
@@ -671,20 +741,20 @@
           player.inAdMode = true;
           var url = mergeURL(adBreaks[currentAdBreak].adTagURI, requestUrl);
           if (settings.debug) {
-            videojs.log('ad-scheduler', 'Access URL:' + url);
+            videojs.log('[ad-scheduler] Access URL:' + url);
           }
           DMVAST.client.get(url, null, vastCallback);
         }
       } else {
         if (adBreaks[currentAdBreak].timeOffset === -1) {
           if (settings.debug) {
-            videojs.log('ad-scheduler', 'Setup postroll handle');
+            videojs.log('[ad-scheduler] Setup postroll handle');
           }
           // Stop time update handle
           player.off('timeupdate', timeUpdateHandle);
           // Setup Postroll
           this.hasPostroll = true;
-          player.one('ended', postrollHandle);
+          player.one('contentended', postrollHandle);
         }
       }
       // Make sure setup postroll only when there is only one ad break for postroll.
@@ -696,11 +766,11 @@
      * @return {[type]}       [description]
      */
     var prerollHandle = function(event) {
-      player.pause();
+      // player.pause();
       if (settings.debug) {
-        videojs.log('ad-scheduler', 'Preroll triggered.');
+        videojs.log('[ad-scheduler] Preroll triggered.');
       }
-      player.off('timeupdate', timeUpdateHandle);
+      // player.off('timeupdate', timeUpdateHandle);
 
       // Prepare for AD time
       if (adBreaks[currentAdBreak].isWrapper === false && adBreaks[currentAdBreak].vastAdData !== undefined) {
@@ -710,11 +780,10 @@
         player.inAdMode = true;
         var url = mergeURL(adBreaks[currentAdBreak].adTagURI, requestUrl);
         if (settings.debug) {
-          videojs.log('ad-scheduler', 'Access URL:' + url);
+          videojs.log('[ad-scheduler] Access URL:' + url);
         }
         DMVAST.client.get(url, null, vastCallback);
       }
-      // player.trigger('adsready');
     };
 
     /**
@@ -724,10 +793,10 @@
      */
     var postrollHandle = function(event) {
       if (settings.debug) {
-        videojs.log('ad-scheduler', 'Postroll triggered.');
+        videojs.log('[ad-scheduler] Postroll triggered.');
       }
       player.off('timeupdate', timeUpdateHandle);
-      player.off('ended', postrollHandle);
+      player.off('contentended', postrollHandle);
       this.hasPostroll = false;
       // Prepare for AD time
       if (adBreaks[currentAdBreak].isWrapper === false && adBreaks[currentAdBreak].vastAdData !== undefined) {
@@ -737,7 +806,7 @@
         player.inAdMode = true;
         var url = mergeURL(adBreaks[currentAdBreak].adTagURI, requestUrl);
         if (settings.debug) {
-          videojs.log('ad-scheduler', 'Access URL:' + url);
+          videojs.log('[ad-scheduler] Access URL:' + url);
         }
         DMVAST.client.get(url, null, vastCallback);
       }
@@ -746,13 +815,13 @@
     var offTimeUpdateHandle = function(event) {
       if (!this.hasPostroll) {
         if (settings.debug) {
-          videojs.log('ad-scheduler', 'Switch off time update handle.');
+          videojs.log('[ad-scheduler] Switch off time update handle.');
         }
         player.off('timeupdate', timeUpdateHandle);
-        player.trigger('onCompletion');
+        // player.trigger('onCompletion');
       } else {
         if (settings.debug) {
-          videojs.log('ad-scheduler', 'Yield completion after postroll handle.');
+          videojs.log('[ad-scheduler] Yield completion after postroll handle.');
         }
       }
     };
@@ -762,6 +831,7 @@
     // Hook time objects to determine if one of adbreak reached.
     player.on('contentupdate', contentUpdateHandle);
     player.on('readyforpreroll', prerollHandle);
+    player.on('contentplayback', timeUpdateHandle);
 
     // replace initializer to adscheduler namespace.
     player.ottAdScheduler = {
@@ -814,7 +884,7 @@
        * @return {[type]}        Return current settings, or player object for chain use.
        */
       resumeSkipMidroll: function(option) {
-        if(!option) {
+        if (!option) {
           return settings.resumeSkipMidroll;
         } else {
           settings.resumeSkipMidroll = option;
