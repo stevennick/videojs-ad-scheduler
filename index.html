@@ -50,8 +50,8 @@ With ad scheduler, the VideoJS player can accept VMAP v1.0.1 schedule document w
 <h2>
 <a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting Started</h2>
 
-<p>Before use plugin works with exist VideoJS enabled page, you'll needs external VAST&amp;VMAP parser for advertisement document information extraction. Here recommanded to use <a href="https://github.com/dailymotion/vast-client-js">vast-client-js</a> from dailymotion, and <a href="https://github.com/stevennick/vmap-client-js">vmap-client-js</a> created by me.
-This plugin also require <a href="https://github.com/videojs/videojs-contrib-ads">videojs-contrib-ads</a> plugin has installed.</p>
+<p>Before use plugin works with exist VideoJS enabled page, you'll need external VAST&amp;VMAP parser for advertisement document information extraction. Here recommended to use <a href="https://github.com/dailymotion/vast-client-js">vast-client-js</a> from Dailymotion, and <a href="https://github.com/stevennick/vmap-client-js">vmap-client-js</a> created by me.
+This plugin also requires <a href="https://github.com/videojs/videojs-contrib-ads">videojs-contrib-ads</a> plugin has installed.</p>
 
 <p>Once you've added the plugin script to your page, you can use it with any video:</p>
 
@@ -83,7 +83,7 @@ This plugin also require <a href="https://github.com/videojs/videojs-contrib-ads
 <h3>
 <a id="plugin-options" class="anchor" href="#plugin-options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Plugin Options</h3>
 
-<p>You need pass in an options object to the plugin upon initialization. This
+<p>You need a pass in an options object to the plugin upon initialization. This
 object may contain any of the following properties:</p>
 
 <h4>
@@ -92,7 +92,7 @@ object may contain any of the following properties:</p>
 <p>Type: <code>String</code>
 Default: ""</p>
 
-<p>Setup VMAP request URL, which will used in content video.</p>
+<p>Setup VMAP requests URL, which will use in the content video.</p>
 
 <h4>
 <a id="allowskip-optional" class="anchor" href="#allowskip-optional" aria-hidden="true"><span class="octicon octicon-link"></span></a>allowSkip (Optional)</h4>
@@ -100,7 +100,7 @@ Default: ""</p>
 <p>Type: <code>Boolean</code>
 Default: True</p>
 
-<p>Allow user skip each ad content. This option will NOT override ad break instructions defined in VAST document if ad document setup is not skippable.</p>
+<p>Allow user skip each ad content. This option will NOT override ad break instructions defined in the VAST document if ad document setup is not skippable.</p>
 
 <h4>
 <a id="skiptime-optional" class="anchor" href="#skiptime-optional" aria-hidden="true"><span class="octicon octicon-link"></span></a>skipTime (Optional)</h4>
@@ -108,7 +108,7 @@ Default: True</p>
 <p>Type: <code>Integer</code>
 Default: 5 (Seconds)</p>
 
-<p>Allow user skip each ad content after ad content is played over specified seconds. This option will NOT override ad break instructions defined in VAST document if ad document setup is not skippable.</p>
+<p>Allow user skip each ad content after ad content is played over specified seconds. This option will NOT override ad break instructions defined in the VAST document if ad document setup is not skippable.</p>
 
 <h4>
 <a id="startoffset-optional" class="anchor" href="#startoffset-optional" aria-hidden="true"><span class="octicon octicon-link"></span></a>startOffset (Optional)</h4>
@@ -116,7 +116,7 @@ Default: 5 (Seconds)</p>
 <p>Type: <code>Integer</code>
 Default: 0 (Seconds)</p>
 
-<p>Allow player resume playback from given time offset, value must be in seconds. This startOffset function must call before loading actual content, otherwise, player offset may not operate corrected.</p>
+<p>Allow player resume playback from given time offset, the value must be in seconds. This startOffset function must call before loading actual content, otherwise, the player offset may not operate corrected.</p>
 
 <h4>
 <a id="resumeskipmidroll-optional" class="anchor" href="#resumeskipmidroll-optional" aria-hidden="true"><span class="octicon octicon-link"></span></a>resumeSkipMidroll (Optional)</h4>
@@ -124,12 +124,12 @@ Default: 0 (Seconds)</p>
 <p>Type: <code>Boolean</code>
 Default: false</p>
 
-<p>Allow control player to skip midrolls that setup before given startOffset. Preroll advertisements will not affected by this setting. This resumeSkipMidroll function must call before loading VMAP or will still not skip midroll ads.</p>
+<p>Allow control player to skip midrolls that setup before given startOffset. Preroll advertisements will not affect by this setting. This resumeSkipMidroll function must call before loading VMAP or will still not skip midroll ads.</p>
 
 <h3>
 <a id="methods" class="anchor" href="#methods" aria-hidden="true"><span class="octicon octicon-link"></span></a>Methods</h3>
 
-<p>This plugin added options as same name methods, let user be able to change options in ad scheduler runtime. Once you retrieve the player runtime, use player.ottAdScheduler namespace to access them.</p>
+<p>This plugin added options as same name methods, let the user be able to change options in ad scheduler runtime. Once you retrieve the player runtime, use player.ottAdScheduler namespace to access them.</p>
 
 <div class="highlight highlight-source-js"><pre>    player.ottAdScheduler.requestUrl();       <span class="pl-c">// Get current VMAP request URL</span>
     player.ottAdScheduler.requestUrl(foo);    <span class="pl-c">// Setup VMAP request URL as foo</span></pre></div>
