@@ -670,9 +670,9 @@
           }
         }
         player.el().insertBefore(skipButton, controlBar);
-
+       
+        var maxDelay = settings.skipTime > player.vastTracker.skipDelay ? settings.skipTime : player.vastTracker.skipDelay;
         var adTimeupdate = function(e) {
-          var maxDelay = settings.skipTime > player.vastTracker.skipDelay ? settings.skipTime : player.vastTracker.skipDelay;
           var timeLeft = Math.ceil(maxDelay - player.currentTime());
           if (timeLeft > 0) {
             player.ottAdScheduler.skipButton.innerHTML = 'You can skip ad in ' + timeLeft + '...';
@@ -684,7 +684,7 @@
           }
         };
 
-        if (player.vastTracker.skipDelay !== null) {
+        if (maxDelay !== null) {
           player.on('adtimeupdate', adTimeupdate);
         }
 
